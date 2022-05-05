@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BookingFlights.AppLogic\BookingFlights.AppLogic.csproj" />
+    <ProjectReference Include="..\BookingFlights.DataAccess\BookingFlights.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
