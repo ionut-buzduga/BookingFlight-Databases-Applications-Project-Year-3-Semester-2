@@ -1,4 +1,5 @@
 ﻿using BookingFlights.Abstractions.Repository;
+using BookingFlights.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +8,37 @@ using System.Threading.Tasks;
 
 namespace BookingFlights.DataAccess
 {
-    public class BaseRepository<T> : IBaseRepository<T>
+    public class BaseRepository<T> : IBaseRepository<T> where T : EntityClass
     {
+        protected readonly BookingFlightsDbContext dbContext;
+
+        public BaseRepository(BookingFlightsDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
         public T Add(T element)
         {
-            throw new NotImplementedException();
+           var returnEntity = dbContext.Set<T>().Add(element)
+                                    .Entity;
+
+            dbContext.SaveChanges();
+
+            return returnEntity;
         }
 
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var item = dbContext.Set<T>().Single(entity => entity.Id == id);
+
+            dbContext.Set<T>().Remove(item);
+
+            dbContext.SaveChanges();
         }
 
-        public ICollection<T> GetAll(Guid id)
+        public virtual ICollection<T> GetAll()
         {
-            throw new NotImplementedException();
+            return dbContext.Set<T>().ToList();
         }
 
         public T GetById(Guid id)

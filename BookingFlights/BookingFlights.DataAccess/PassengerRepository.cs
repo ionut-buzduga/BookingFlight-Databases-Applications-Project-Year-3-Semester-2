@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace BookingFlights.DataAccess
 {
-    public class PassengerRepository: BaseRepository<Passenger>, IPassengersRepository
+    public class PassengerRepository : BaseRepository<Passenger>, IPassengersRepository
     {
+        public PassengerRepository(BookingFlightsDbContext dbContext) : base(dbContext)
+        {
+        }
     }
 }

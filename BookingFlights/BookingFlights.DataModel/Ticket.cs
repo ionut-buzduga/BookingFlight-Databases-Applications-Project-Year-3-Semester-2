@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace BookingFlights.DataModel
 {
-    public class Ticket
+    public class Ticket: EntityClass
     {
-        public Guid TicketId { get; set; }
-
         public string Type { get; set; }
 
         public int Price { get; set; }

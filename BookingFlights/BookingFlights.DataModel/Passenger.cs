@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace BookingFlights.DataModel
 {
-    public class Passenger
+    public class Passenger: EntityClass
     {
         public Passenger()
         {
             this.Flights = new HashSet<Flight>();  
         }
-
-        public Guid PassengerId { get; set; }
 
         public string PassengerName { get; set; }
 
