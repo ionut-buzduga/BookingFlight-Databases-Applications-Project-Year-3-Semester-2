@@ -21,7 +21,7 @@ namespace BookingFlights.DataAccess.Migrations
 
             modelBuilder.Entity("BookingFlights.DataModel.Flight", b =>
                 {
-                    b.Property<Guid>("FlightId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -40,14 +40,14 @@ namespace BookingFlights.DataAccess.Migrations
                     b.Property<DateTime>("departureDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("FlightId");
+                    b.HasKey("Id");
 
                     b.ToTable("Flights");
                 });
 
             modelBuilder.Entity("BookingFlights.DataModel.Passenger", b =>
                 {
-                    b.Property<Guid>("PassengerId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -63,14 +63,14 @@ namespace BookingFlights.DataAccess.Migrations
                     b.Property<string>("Telephone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PassengerId");
+                    b.HasKey("Id");
 
                     b.ToTable("Passengers");
                 });
 
             modelBuilder.Entity("BookingFlights.DataModel.Seat", b =>
                 {
-                    b.Property<Guid>("SeatId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -83,7 +83,7 @@ namespace BookingFlights.DataAccess.Migrations
                     b.Property<bool>("isAvailable")
                         .HasColumnType("bit");
 
-                    b.HasKey("SeatId");
+                    b.HasKey("Id");
 
                     b.HasIndex("FlightId");
 
@@ -92,7 +92,7 @@ namespace BookingFlights.DataAccess.Migrations
 
             modelBuilder.Entity("BookingFlights.DataModel.Ticket", b =>
                 {
-                    b.Property<Guid>("TicketId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -105,7 +105,7 @@ namespace BookingFlights.DataAccess.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TicketId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PassengerId");
 
@@ -114,15 +114,15 @@ namespace BookingFlights.DataAccess.Migrations
 
             modelBuilder.Entity("FlightPassenger", b =>
                 {
-                    b.Property<Guid>("FlightsFlightId")
+                    b.Property<Guid>("FlightsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PassengersPassengerId")
+                    b.Property<Guid>("PassengersId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("FlightsFlightId", "PassengersPassengerId");
+                    b.HasKey("FlightsId", "PassengersId");
 
-                    b.HasIndex("PassengersPassengerId");
+                    b.HasIndex("PassengersId");
 
                     b.ToTable("FlightPassenger");
                 });
@@ -137,7 +137,7 @@ namespace BookingFlights.DataAccess.Migrations
             modelBuilder.Entity("BookingFlights.DataModel.Ticket", b =>
                 {
                     b.HasOne("BookingFlights.DataModel.Passenger", null)
-                        .WithMany("Ticket")
+                        .WithMany("Tickets")
                         .HasForeignKey("PassengerId");
                 });
 
@@ -145,13 +145,13 @@ namespace BookingFlights.DataAccess.Migrations
                 {
                     b.HasOne("BookingFlights.DataModel.Flight", null)
                         .WithMany()
-                        .HasForeignKey("FlightsFlightId")
+                        .HasForeignKey("FlightsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookingFlights.DataModel.Passenger", null)
                         .WithMany()
-                        .HasForeignKey("PassengersPassengerId")
+                        .HasForeignKey("PassengersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -163,7 +163,7 @@ namespace BookingFlights.DataAccess.Migrations
 
             modelBuilder.Entity("BookingFlights.DataModel.Passenger", b =>
                 {
-                    b.Navigation("Ticket");
+                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }

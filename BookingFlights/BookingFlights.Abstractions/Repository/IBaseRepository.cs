@@ -11,7 +11,7 @@ namespace BookingFlights.Abstractions.Repository
 
         T GetById(Guid id);
 
-        ICollection<T> GetAll(Guid id);
+        ICollection<T> GetAll();
 
         T Add(T element);
 

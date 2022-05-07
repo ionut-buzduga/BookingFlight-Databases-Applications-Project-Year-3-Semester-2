@@ -1,4 +1,4 @@
-﻿using BookingFlights.DataModel;
+﻿using BookingFlights. DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

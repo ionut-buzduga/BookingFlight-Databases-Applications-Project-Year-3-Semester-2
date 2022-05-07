@@ -1,5 +1,6 @@
 ﻿using BookingFlights.Abstractions.Repository;
 using BookingFlights.DataModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace BookingFlights.DataAccess
     {
         public PassengerRepository(BookingFlightsDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public override ICollection<Passenger> GetAll()
+        {
+            return dbContext.Set<Passenger>()
+                            .Include(passenger => passenger.Tickets)
+                            .ToList();
         }
     }
 }
