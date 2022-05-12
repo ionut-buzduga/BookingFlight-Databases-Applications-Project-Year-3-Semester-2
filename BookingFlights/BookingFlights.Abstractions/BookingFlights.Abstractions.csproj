@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BookingFlights.DataModel\BookingFlights.DataModel.csproj" />
   </ItemGroup>
 

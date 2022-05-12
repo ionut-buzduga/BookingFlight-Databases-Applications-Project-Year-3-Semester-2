@@ -23,7 +23,7 @@ namespace BookingFlights.DataModel
 
         public DateTime arrivalDate { get; set; }
 
-        public ICollection<Seat> Seats { get; set; }
+        public ICollection<Seat> Seats { get; set; } = new List<Seat>(30);
 
         public ICollection<Passenger> Passengers { get; set; }
     }

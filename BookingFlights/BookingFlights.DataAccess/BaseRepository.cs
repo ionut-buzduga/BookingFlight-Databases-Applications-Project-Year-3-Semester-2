@@ -29,7 +29,7 @@ namespace BookingFlights.DataAccess
 
         public void Delete(Guid id)
         {
-            var item = dbContext.Set<T>().Single(entity => entity.Id == id);
+            var item = GetById(id);
 
             dbContext.Set<T>().Remove(item);
 
@@ -43,7 +43,7 @@ namespace BookingFlights.DataAccess
 
         public T GetById(Guid id)
         {
-            throw new NotImplementedException();
+          return  dbContext.Set<T>().Single(entity => entity.Id == id);
         }
 
         public T Update(T elementToUpdate)

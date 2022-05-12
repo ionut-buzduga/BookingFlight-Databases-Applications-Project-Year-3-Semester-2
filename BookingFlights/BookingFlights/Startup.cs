@@ -1,4 +1,6 @@
 using BookingFlights.Abstractions.Repository;
+using BookingFlights.Abstractions.Services;
+using BookingFlights.AppLogic.Services;
 using BookingFlights.Data;
 using BookingFlights.DataAccess;
 using Microsoft.AspNetCore.Builder;
@@ -44,8 +46,11 @@ namespace BookingFlights
 
             services.AddScoped<IFlightsRepository, FlightRepository>();
             services.AddScoped<IPassengersRepository, PassengerRepository>();
-
+            services.AddScoped<IFlightService, FlightService>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddControllersWithViews();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
