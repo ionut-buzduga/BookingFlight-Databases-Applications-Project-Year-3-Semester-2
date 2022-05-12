@@ -7,16 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
+using BookingFlights.Abstractions.Services;
 
 namespace BookingFlights
 {
     public class FlightsController : Controller
     {
         private readonly BookingFlightsDbContext _context;
-
-        public FlightsController(BookingFlightsDbContext context)
+        private readonly IFlightService _flightService;
+        public FlightsController(BookingFlightsDbContext context, IFlightService flightService)
         {
             _context = context;
+            _flightService = flightService;
         }
 
         // GET: Flights
@@ -59,8 +61,7 @@ namespace BookingFlights
             if (ModelState.IsValid)
             {
                 flight.Id = Guid.NewGuid();
-                _context.Add(flight);
-                await _context.SaveChangesAsync();
+               _flightService.CreateFromEntity(flight);
                 return RedirectToAction(nameof(Index));
             }
             return View(flight);
