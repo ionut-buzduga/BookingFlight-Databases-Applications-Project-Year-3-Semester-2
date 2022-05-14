@@ -12,19 +12,19 @@ using BookingFlights.Abstractions.Services;
 namespace BookingFlights
 {
     public class FlightsController : Controller
-    {
-        private readonly BookingFlightsDbContext _context;
+    {  
         private readonly IFlightService _flightService;
-        public FlightsController(BookingFlightsDbContext context, IFlightService flightService)
+        public FlightsController(IFlightService flightService)
         {
-            _context = context;
+            
             _flightService = flightService;
         }
 
         // GET: Flights
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Flights.ToListAsync());
+            var flights = _flightService.GetAllQueryable();
+            return View(await flights.ToListAsync());
         }
 
         // GET: Flights/Details/5
@@ -35,7 +35,7 @@ namespace BookingFlights
                 return NotFound();
             }
 
-            var flight = await _context.Flights
+            var flight = await _flightService.GetAllQueryable()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (flight == null)
             {
@@ -62,6 +62,7 @@ namespace BookingFlights
             {
                 flight.Id = Guid.NewGuid();
                _flightService.CreateFromEntity(flight);
+                await _flightService.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(flight);
@@ -75,7 +76,8 @@ namespace BookingFlights
                 return NotFound();
             }
 
-            var flight = await _context.Flights.FindAsync(id);
+           
+            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             if (flight == null)
             {
                 return NotFound();
@@ -99,8 +101,9 @@ namespace BookingFlights
             {
                 try
                 {
-                    _context.Update(flight);
-                    await _context.SaveChangesAsync();
+                    _flightService.UpdateFromEntity(flight);
+                    await _flightService.SaveAsync();
+                   
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,9 +128,8 @@ namespace BookingFlights
             {
                 return NotFound();
             }
-
-            var flight = await _context.Flights
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            
             if (flight == null)
             {
                 return NotFound();
@@ -141,15 +143,17 @@ namespace BookingFlights
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var flight = await _context.Flights.FindAsync(id);
-            _context.Flights.Remove(flight);
-            await _context.SaveChangesAsync();
+
+            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            _flightService.DeleteFromEntity(flight);
+            await _flightService.SaveAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool FlightExists(Guid id)
         {
-            return _context.Flights.Any(e => e.Id == id);
+            return _flightService.GetAllQueryable().Any(m => m.Id == id);
         }
     }
 }

@@ -11,13 +11,15 @@ namespace BookingFlights.Abstractions.Repository
 
         T GetById(Guid id);
 
-        ICollection<T> GetAll();
+        IQueryable<T> GetAll();
 
         T Add(T element);
 
-        void Delete(Guid id);
+        void Delete(T entity);
 
-        T Update(T elementToUpdate);
+        T Update(T element);
+
+        Task SaveAsync();
 
     }
 }
