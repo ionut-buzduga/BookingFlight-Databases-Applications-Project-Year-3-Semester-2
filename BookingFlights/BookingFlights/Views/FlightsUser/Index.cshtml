@@ -43,6 +43,13 @@
             <td>
                  @Convert.ToString(string.Format("{0:hh:mm tt}", item.arrivalDate))
             </td>
+            <td>
+                @using (Html.BeginForm("Index", "Tickets", FormMethod.Get))
+                {
+                   
+                    <input type="submit" value="Book Flight" />
+                }
+            </td>
         </tr>
 }
     </tbody>

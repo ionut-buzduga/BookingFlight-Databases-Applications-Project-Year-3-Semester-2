@@ -15,7 +15,7 @@ namespace BookingFlights.DataAccess
         {
         }
 
-        //public override IQueryable<Flight> GetAll()
+        //public override ICollection<Flight> GetAll()
         //{
         //    return dbContext.Set<Flight>()
         //                    .Include(flight => flight.Seats)
