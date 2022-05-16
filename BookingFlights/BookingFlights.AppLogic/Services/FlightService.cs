@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 using BookingFlights.Abstractions.Repository;
 using BookingFlights.Abstractions.Services;
 using BookingFlights.DataModel;
+using System.Linq.Expressions;
 
 namespace BookingFlights.AppLogic.Services
 {
    public class FlightService: IFlightService
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
+
+        public IQueryable<Flight> Flights()
+        {
+            return _repositoryWrapper.FlightsRepository.FindAll();
+        }
 
         public FlightService(IRepositoryWrapper repositoryWrapper)
         {
@@ -23,6 +29,10 @@ namespace BookingFlights.AppLogic.Services
             return _repositoryWrapper.FlightsRepository.GetAll();
         }
 
+        public IQueryable<Flight> GetByCondition(Expression<Func<Flight, bool>> expression)
+        {
+            return _repositoryWrapper.FlightsRepository.FindByCondition(expression);
+        }
 
         public void CreateFromEntity(Flight flight)
         {
@@ -45,5 +55,9 @@ namespace BookingFlights.AppLogic.Services
             await _repositoryWrapper.FlightsRepository.SaveAsync();
         }
 
+        public IEnumerable<object> Where(Func<object, bool> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

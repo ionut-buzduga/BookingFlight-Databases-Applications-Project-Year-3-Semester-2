@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace BookingFlights.DataAccess
 {
@@ -43,7 +44,14 @@ namespace BookingFlights.DataAccess
         {
             return dbContext.Set<T>().AsNoTracking();
         }
-
+        public virtual IQueryable<T> FindAll()
+        {
+            return this.dbContext.Set<T>().AsNoTracking();
+        }
+        public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return this.dbContext.Set<T>().Where(expression).AsNoTracking();
+        }
         public T GetById(Guid id)
         {
           return  dbContext.Set<T>().Single(entity => entity.Id == id);

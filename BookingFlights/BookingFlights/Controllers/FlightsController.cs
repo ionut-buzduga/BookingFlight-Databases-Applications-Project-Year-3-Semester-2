@@ -14,17 +14,38 @@ namespace BookingFlights
     public class FlightsController : Controller
     {  
         private readonly IFlightService _flightService;
-        public FlightsController(IFlightService flightService)
+        private readonly BookingFlightsDbContext _context;
+        public FlightsController(IFlightService flightService, BookingFlightsDbContext context)
         {
             
             _flightService = flightService;
+            _context = context;
         }
 
         // GET: Flights
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index(string departureCity, string arrivalCity, DateTime departureDate)
+        //{
+        //    var flights = _flightService.GetAllQueryable();
+        //    //var res = DateTime.Compare(departureDate, t2: flights.departureDate);
+        //    if (departureCity is not null)
+        //    {
+        //        flights = _flightService.GetByCondition(flights => flights.DepartureCity.Contains(departureCity) && flights.ArrivalCity.Contains(arrivalCity) && (flights.departureDate.Equals(departureDate)) == true);
+        //    }
+
+        //    return View(await flights.ToListAsync());
+        //}
+
+        public async Task<IActionResult> Index(string departureCity, string arrivalCity, DateTime departureDate)
         {
-            var flights = _flightService.GetAllQueryable();
-            return View(await flights.ToListAsync());
+            var specificFlight = _context.Flights.Where(flight => flight.DepartureCity == departureCity)
+                                                 .Where(flight => flight.ArrivalCity == arrivalCity)
+                                                 .Where(flight => flight.departureDate.Date == departureDate.Date);
+            if (specificFlight == null)
+            {
+                return NotFound();
+            }
+
+            return View(specificFlight);
         }
 
         // GET: Flights/Details/5
