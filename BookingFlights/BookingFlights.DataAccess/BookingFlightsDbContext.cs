@@ -20,5 +20,13 @@ namespace BookingFlights.DataAccess
         public DbSet<Seat> Seats { get; set; }
 
         public DbSet<Ticket> Tickets { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Seat>()
+        //        .Property(s => s.isAvailable)
+        //        .HasDefaultValue(true);
+        //}
+
     }
 }

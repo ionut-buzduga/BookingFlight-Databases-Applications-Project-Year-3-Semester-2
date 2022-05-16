@@ -47,6 +47,7 @@ namespace BookingFlights
             services.AddScoped<IFlightsRepository, FlightRepository>();
             services.AddScoped<IPassengersRepository, PassengerRepository>();
             services.AddScoped<IFlightService, FlightService>();
+            services.AddScoped<IPassengerService, PassengerService>();
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddControllersWithViews();
 

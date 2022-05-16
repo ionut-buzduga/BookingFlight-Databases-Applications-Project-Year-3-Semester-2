@@ -20,8 +20,9 @@ namespace BookingFlights.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
-        {
+        public async Task<IActionResult> Index(string flightName)
+        { 
+            
             return View(await _context.Tickets.ToListAsync());
         }
 

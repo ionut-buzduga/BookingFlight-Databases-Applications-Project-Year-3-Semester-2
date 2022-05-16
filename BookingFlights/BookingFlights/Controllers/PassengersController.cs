@@ -9,25 +9,25 @@ using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
 using BookingFlights.Abstractions.Services;
 
-namespace BookingFlights
+namespace BookingFlights.Controllers
 {
-    public class FlightsController : Controller
-    {  
-        private readonly IFlightService _flightService;
-        public FlightsController(IFlightService flightService)
+    public class PassengersController : Controller
+    {
+       
+        private readonly IPassengerService _passengerService;
+        public PassengersController(IPassengerService passengerService)
         {
-            
-            _flightService = flightService;
+            _passengerService = passengerService;
         }
 
-        // GET: Flights
+        // GET: Passengers
         public async Task<IActionResult> Index()
         {
-            var flights = _flightService.GetAllQueryable();
-            return View(await flights.ToListAsync());
+            var passengers = _passengerService.GetAllQueryable();
+            return View(await passengers.ToListAsync());
         }
 
-        // GET: Flights/Details/5
+        // GET: Passengers/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -35,48 +35,40 @@ namespace BookingFlights
                 return NotFound();
             }
 
-            var flight = await _flightService.GetAllQueryable()
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (flight == null)
+            var passenger = await _passengerService.GetAllQueryable()
+               .FirstOrDefaultAsync(m => m.Id == id);
+            if (passenger == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(passenger);
         }
 
-        // GET: Flights/Create
+        // GET: Passengers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Flights/Create
+        // POST: Passengers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,DepartureCity,ArrivalCity,departureDate,arrivalDate,Id")] Flight flight)
+        public async Task<IActionResult> Create([Bind("PassengerName,PassengerSurname,Email,Telephone,Id")] Passenger passenger)
         {
             if (ModelState.IsValid)
             {
-
-               
-                flight.Id = Guid.NewGuid();
-                
-                for (int i = 1; i <= 5; i++)
-                {
-                    Seat seat = new Seat { Number = i, isAvailable = true ,FlightId=flight.Id };
-                    flight.Seats.Add(seat);
-                }
-                _flightService.CreateFromEntity(flight);
-                await _flightService.SaveAsync();
+                passenger.Id = Guid.NewGuid();
+                _passengerService.CreateFromEntity(passenger);
+                await _passengerService.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(flight);
+            return View(passenger);
         }
 
-        // GET: Flights/Edit/5
+        // GET: Passengers/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -84,23 +76,22 @@ namespace BookingFlights
                 return NotFound();
             }
 
-           
-            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
-            if (flight == null)
+            var passenger = await _passengerService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            if (passenger == null)
             {
                 return NotFound();
             }
-            return View(flight);
+            return View(passenger);
         }
 
-        // POST: Flights/Edit/5
+        // POST: Passengers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,DepartureCity,ArrivalCity,departureDate,arrivalDate,Id")] Flight flight)
+        public async Task<IActionResult> Edit(Guid id, [Bind("PassengerName,PassengerSurname,Email,Telephone,Id")] Passenger passenger)
         {
-            if (id != flight.Id)
+            if (id != passenger.Id)
             {
                 return NotFound();
             }
@@ -109,13 +100,12 @@ namespace BookingFlights
             {
                 try
                 {
-                    _flightService.UpdateFromEntity(flight);
-                    await _flightService.SaveAsync();
-                   
+                    _passengerService.UpdateFromEntity(passenger);
+                    await _passengerService.SaveAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FlightExists(flight.Id))
+                    if (!PassengerExists(passenger.Id))
                     {
                         return NotFound();
                     }
@@ -126,42 +116,40 @@ namespace BookingFlights
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(flight);
+            return View(passenger);
         }
 
-        // GET: Flights/Delete/5
+        // GET: Passengers/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
-            
-            if (flight == null)
+
+            var passenger = await _passengerService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            if (passenger == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(passenger);
         }
 
-        // POST: Flights/Delete/5
+        // POST: Passengers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-
-            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
-            _flightService.DeleteFromEntity(flight);
-            await _flightService.SaveAsync();
-
+            var passenger = await _passengerService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            _passengerService.DeleteFromEntity(passenger);
+            await _passengerService.SaveAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FlightExists(Guid id)
+        private bool PassengerExists(Guid id)
         {
-            return _flightService.GetAllQueryable().Any(m => m.Id == id);
+            return _passengerService.GetAllQueryable().Any(m => m.Id == id);
         }
     }
 }

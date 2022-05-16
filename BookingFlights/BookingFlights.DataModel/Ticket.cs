@@ -11,5 +11,9 @@ namespace BookingFlights.DataModel
         public string Type { get; set; }
 
         public int Price { get; set; }
+
+        public Guid PassengerId { get; set; }
+
+        public Passenger Passenger { get; set; }
     }
 }

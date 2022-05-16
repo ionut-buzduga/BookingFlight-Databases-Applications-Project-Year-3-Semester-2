@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingFlights.DataAccess.Migrations
 {
     [DbContext(typeof(BookingFlightsDbContext))]
-    [Migration("20220507120221_IntialMig")]
-    partial class IntialMig
+    [Migration("20220516151844_FirstMig")]
+    partial class FirstMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,10 +62,15 @@ namespace BookingFlights.DataAccess.Migrations
                     b.Property<string>("PassengerSurname")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("SeatId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Telephone")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SeatId");
 
                     b.ToTable("Passengers");
                 });
@@ -76,7 +81,7 @@ namespace BookingFlights.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("FlightId")
+                    b.Property<Guid>("FlightId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Number")
@@ -98,7 +103,7 @@ namespace BookingFlights.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PassengerId")
+                    b.Property<Guid>("PassengerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Price")
@@ -129,18 +134,35 @@ namespace BookingFlights.DataAccess.Migrations
                     b.ToTable("FlightPassenger");
                 });
 
+            modelBuilder.Entity("BookingFlights.DataModel.Passenger", b =>
+                {
+                    b.HasOne("BookingFlights.DataModel.Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatId");
+
+                    b.Navigation("Seat");
+                });
+
             modelBuilder.Entity("BookingFlights.DataModel.Seat", b =>
                 {
-                    b.HasOne("BookingFlights.DataModel.Flight", null)
+                    b.HasOne("BookingFlights.DataModel.Flight", "Flight")
                         .WithMany("Seats")
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
                 });
 
             modelBuilder.Entity("BookingFlights.DataModel.Ticket", b =>
                 {
-                    b.HasOne("BookingFlights.DataModel.Passenger", null)
+                    b.HasOne("BookingFlights.DataModel.Passenger", "Passenger")
                         .WithMany("Tickets")
-                        .HasForeignKey("PassengerId");
+                        .HasForeignKey("PassengerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Passenger");
                 });
 
             modelBuilder.Entity("FlightPassenger", b =>
