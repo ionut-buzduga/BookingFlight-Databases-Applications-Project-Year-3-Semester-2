@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BookingFlights.Abstractions.Repository;
 using BookingFlights.Abstractions.Services;
 using BookingFlights.DataModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingFlights.AppLogic.Services
 {
@@ -18,12 +19,32 @@ namespace BookingFlights.AppLogic.Services
             _repositoryWrapper = repositoryWrapper;
         }
 
-        public void CreateFromEntity(Flight flight)
+       public IQueryable<Flight> GetAllQueryable()
         {
+            return _repositoryWrapper.FlightsRepository.GetAll().Include(flight => flight.Seats);
+        }
+
+
+        public void CreateFromEntity(Flight flight)
+        {     
              _repositoryWrapper.FlightsRepository.Add(flight);
             
         }
 
+        public void UpdateFromEntity(Flight flight)
+        {
+            _repositoryWrapper.FlightsRepository.Update(flight);
+        }
+
+        public void DeleteFromEntity(Flight flight)
+        {
+            _repositoryWrapper.FlightsRepository.Delete(flight);
+        }
+
+        public async System.Threading.Tasks.Task SaveAsync()
+        {
+            await _repositoryWrapper.FlightsRepository.SaveAsync();
+        }
 
     }
 }

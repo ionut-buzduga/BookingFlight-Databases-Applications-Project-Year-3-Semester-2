@@ -12,6 +12,7 @@ namespace BookingFlights.DataModel
 
         public bool isAvailable { get; set; }
 
-
+        public Guid FlightId { get; set; }
+        public Flight Flight { get; set; }
     }
 }

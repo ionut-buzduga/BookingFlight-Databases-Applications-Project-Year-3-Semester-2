@@ -9,10 +9,10 @@
     <thead>
         <tr>
             <th>
-               Number of the plane
+                Number of the plane
             </th>
             <th>
-               Departure
+                Departure
             </th>
             <th>
                 Arrival
@@ -21,7 +21,10 @@
                 Departure time
             </th>
             <th>
-               Arrival time
+                Arrival time
+            </th>
+            <th>
+                Seats
             </th>
         </tr>
     </thead>
@@ -38,10 +41,22 @@
                 @Html.DisplayFor(modelItem => item.ArrivalCity)
             </td>
             <td>
-               @Convert.ToString(string.Format("{0:hh:mm tt}", item.departureDate))
+                @Convert.ToString(string.Format("{0:hh:mm tt}", item.departureDate))
             </td>
             <td>
-                 @Convert.ToString(string.Format("{0:hh:mm tt}", item.arrivalDate))
+                @Convert.ToString(string.Format("{0:hh:mm tt}", item.arrivalDate))
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Seats)
+            </td>
+
+            <td>
+                @using (Html.BeginForm("Index", "Tickets", FormMethod.Get))
+                {
+
+                    <input type="submit" value="Book Flight" />
+                }
             </td>
         </tr>
 }

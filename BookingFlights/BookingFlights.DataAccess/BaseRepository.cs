@@ -1,5 +1,6 @@
 ﻿using BookingFlights.Abstractions.Repository;
 using BookingFlights.DataModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,23 +23,25 @@ namespace BookingFlights.DataAccess
            var returnEntity = dbContext.Set<T>().Add(element)
                                     .Entity;
 
-            dbContext.SaveChanges();
-
             return returnEntity;
         }
 
-        public void Delete(Guid id)
+        public void Delete(T entity)
         {
-            var item = GetById(id);
-
-            dbContext.Set<T>().Remove(item);
-
-            dbContext.SaveChanges();
+            this.dbContext.Set<T>().Remove(entity);
         }
+        //public void Delete(Guid id)
+        //{
+        //    var item = GetById(id);
 
-        public virtual ICollection<T> GetAll()
+        //    dbContext.Set<T>().Remove(item);
+
+        //    dbContext.SaveChanges();
+        //}
+
+        public virtual IQueryable<T> GetAll()
         {
-            return dbContext.Set<T>().ToList();
+            return dbContext.Set<T>().AsNoTracking();
         }
 
         public T GetById(Guid id)
@@ -46,9 +49,18 @@ namespace BookingFlights.DataAccess
           return  dbContext.Set<T>().Single(entity => entity.Id == id);
         }
 
-        public T Update(T elementToUpdate)
+        public T Update(T element)
         {
-            throw new NotImplementedException();
+            //  throw new NotImplementedException();
+            var returnEntity = dbContext.Set<T>().Update(element).Entity;
+
+            return returnEntity;
+
+        }
+
+        public async Task SaveAsync()
+        {
+            await this.dbContext.SaveChangesAsync();
         }
     }
 }

@@ -9,13 +9,19 @@ namespace BookingFlights.Abstractions.Services
 {
     public interface IFlightService
     {
-       // IQueryable<Flight> GetAllQueryable();
-       // IQueryable<Flight> GetByCondition(Expression<Func<Course, bool>> expression);
+        // IQueryable<Flight> GetAllQueryable();
+        // IQueryable<Flight> GetByCondition(Expression<Func<Course, bool>> expression);
+        IQueryable<Flight> GetAllQueryable();
         void CreateFromEntity(Flight flight);
-      //  void FlightFromEntity(Flight flight);
-      //  void DeleteFromEntity(Flight flight);
-      //  System.Threading.Tasks.Task SaveAsync();
-      //  IQueryable<Flight> GetFlights();
+        public void UpdateFromEntity(Flight flight);
+
+        public void DeleteFromEntity(Flight flight);
+       
+        System.Threading.Tasks.Task SaveAsync();
+        //  void FlightFromEntity(Flight flight);
+        //  void DeleteFromEntity(Flight flight);
+        //  System.Threading.Tasks.Task SaveAsync();
+        //  IQueryable<Flight> GetFlights();
 
     }
 }

@@ -15,11 +15,11 @@ namespace BookingFlights.DataAccess
         {
         }
 
-        public override ICollection<Passenger> GetAll()
-        {
-            return dbContext.Set<Passenger>()
-                            .Include(passenger => passenger.Tickets)
-                            .ToList();
-        }
+        //public override IQueryable<Passenger> GetAll()
+        //{
+        //    return dbContext.Set<Passenger>()
+        //                    .Include(passenger => passenger.Tickets)
+        //                    .ToList();
+        //}
     }
 }

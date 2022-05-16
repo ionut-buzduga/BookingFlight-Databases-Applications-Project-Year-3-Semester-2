@@ -10,8 +10,11 @@ namespace BookingFlights.Abstractions.Repository
     public interface IRepositoryWrapper
     {
         IFlightsRepository FlightsRepository { get; }
-        
+
+        IPassengersRepository PassengersRepository { get; }
 
         void Save();
     }
+
+  
 }

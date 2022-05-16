@@ -7,27 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
-using BookingFlights.Abstractions.Services;
 
-namespace BookingFlights
+namespace BookingFlights.Controllers
 {
-    public class FlightsController : Controller
-    {  
-        private readonly IFlightService _flightService;
-        public FlightsController(IFlightService flightService)
+    public class TicketsController : Controller
+    {
+        private readonly BookingFlightsDbContext _context;
+
+        public TicketsController(BookingFlightsDbContext context)
         {
+            _context = context;
+        }
+
+        // GET: Tickets
+        public async Task<IActionResult> Index(string flightName)
+        { 
             
-            _flightService = flightService;
+            return View(await _context.Tickets.ToListAsync());
         }
 
-        // GET: Flights
-        public async Task<IActionResult> Index()
-        {
-            var flights = _flightService.GetAllQueryable();
-            return View(await flights.ToListAsync());
-        }
-
-        // GET: Flights/Details/5
+        // GET: Tickets/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -35,48 +34,40 @@ namespace BookingFlights
                 return NotFound();
             }
 
-            var flight = await _flightService.GetAllQueryable()
+            var ticket = await _context.Tickets
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (flight == null)
+            if (ticket == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(ticket);
         }
 
-        // GET: Flights/Create
+        // GET: Tickets/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Flights/Create
+        // POST: Tickets/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,DepartureCity,ArrivalCity,departureDate,arrivalDate,Id")] Flight flight)
+        public async Task<IActionResult> Create([Bind("Type,Price,Id")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
-
-               
-                flight.Id = Guid.NewGuid();
-                
-                for (int i = 1; i <= 5; i++)
-                {
-                    Seat seat = new Seat { Number = i, isAvailable = true ,FlightId=flight.Id };
-                    flight.Seats.Add(seat);
-                }
-                _flightService.CreateFromEntity(flight);
-                await _flightService.SaveAsync();
+                ticket.Id = Guid.NewGuid();
+                _context.Add(ticket);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(flight);
+            return View(ticket);
         }
 
-        // GET: Flights/Edit/5
+        // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -84,23 +75,22 @@ namespace BookingFlights
                 return NotFound();
             }
 
-           
-            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
-            if (flight == null)
+            var ticket = await _context.Tickets.FindAsync(id);
+            if (ticket == null)
             {
                 return NotFound();
             }
-            return View(flight);
+            return View(ticket);
         }
 
-        // POST: Flights/Edit/5
+        // POST: Tickets/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,DepartureCity,ArrivalCity,departureDate,arrivalDate,Id")] Flight flight)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Type,Price,Id")] Ticket ticket)
         {
-            if (id != flight.Id)
+            if (id != ticket.Id)
             {
                 return NotFound();
             }
@@ -109,13 +99,12 @@ namespace BookingFlights
             {
                 try
                 {
-                    _flightService.UpdateFromEntity(flight);
-                    await _flightService.SaveAsync();
-                   
+                    _context.Update(ticket);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FlightExists(flight.Id))
+                    if (!TicketExists(ticket.Id))
                     {
                         return NotFound();
                     }
@@ -126,42 +115,41 @@ namespace BookingFlights
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(flight);
+            return View(ticket);
         }
 
-        // GET: Flights/Delete/5
+        // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
-            
-            if (flight == null)
+
+            var ticket = await _context.Tickets
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (ticket == null)
             {
                 return NotFound();
             }
 
-            return View(flight);
+            return View(ticket);
         }
 
-        // POST: Flights/Delete/5
+        // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-
-            var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
-            _flightService.DeleteFromEntity(flight);
-            await _flightService.SaveAsync();
-
+            var ticket = await _context.Tickets.FindAsync(id);
+            _context.Tickets.Remove(ticket);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FlightExists(Guid id)
+        private bool TicketExists(Guid id)
         {
-            return _flightService.GetAllQueryable().Any(m => m.Id == id);
+            return _context.Tickets.Any(e => e.Id == id);
         }
     }
 }
