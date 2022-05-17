@@ -12,6 +12,7 @@ namespace BookingFlights.DataAccess
         private readonly BookingFlightsDbContext _bookingFLightsDbContext;
         private IFlightsRepository? _flightsRepository;
         private IPassengersRepository? _passengersRepository;
+        private ISeatsRepository? _seatsRepository;
 
         public IFlightsRepository FlightsRepository
         {
@@ -36,6 +37,19 @@ namespace BookingFlights.DataAccess
                 }
 
                 return _passengersRepository;
+            }
+        }
+
+        public ISeatsRepository SeatsRepository
+        {
+            get
+            {
+                if (_seatsRepository == null)
+                {
+                    _seatsRepository = new SeatRepository(_bookingFLightsDbContext);
+                }
+
+                return _seatsRepository;
             }
         }
 

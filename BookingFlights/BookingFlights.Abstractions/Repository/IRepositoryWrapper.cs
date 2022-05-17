@@ -13,6 +13,8 @@ namespace BookingFlights.Abstractions.Repository
 
         IPassengersRepository PassengersRepository { get; }
 
+        ISeatsRepository SeatsRepository { get; }
+
         void Save();
     }
 

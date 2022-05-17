@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,11 @@ namespace BookingFlights.DataAccess
                                     .Entity;
 
             return returnEntity;
+        }
+
+        public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return this.dbContext.Set<T>().Where(expression).AsNoTracking();
         }
 
         public void Delete(T entity)

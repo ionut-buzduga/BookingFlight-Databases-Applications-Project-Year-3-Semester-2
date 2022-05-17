@@ -52,11 +52,16 @@
             </td>
 
             <td>
-                @using (Html.BeginForm("Index", "Tickets", FormMethod.Get))
+                @*@using (Html.BeginForm("Index", "Seats", FormMethod.Get))
                 {
+                   
+                    <input type="submit" value="Book Flight"  />
+                }*@
+                <form method="get" action="Seats">
 
-                    <input type="submit" value="Book Flight" />
-                }
+                    <input type="hidden" value="@item.Id" name="id" />
+                    <input type="submit" value="Book Flight"/>
+                </form>
             </td>
         </tr>
 }
