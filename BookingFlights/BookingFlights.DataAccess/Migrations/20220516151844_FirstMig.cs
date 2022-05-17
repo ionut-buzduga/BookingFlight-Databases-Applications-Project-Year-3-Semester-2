@@ -40,6 +40,7 @@ namespace BookingFlights.DataAccess.Migrations
                         column: x => x.FlightId,
                         principalTable: "Flights",
                         principalColumn: "Id",
+                       
                         onDelete: ReferentialAction.Cascade);
                 });
 
