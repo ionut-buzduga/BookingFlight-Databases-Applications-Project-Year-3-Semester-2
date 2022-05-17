@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,17 +15,30 @@ namespace BookingFlights
     public class FlightsController : Controller
     {  
         private readonly IFlightService _flightService;
-        public FlightsController(IFlightService flightService)
+        private readonly ISeatService _seatService;
+        public FlightsController(IFlightService flightService , ISeatService seatService)
         {
-            
+            _context = context;
             _flightService = flightService;
+            _seatService = seatService;
         }
 
         // GET: Flights
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string departureCity, string arrivalCity, DateTime departureDate)
         {
-            var flights = _flightService.GetAllQueryable();
-            return View(await flights.ToListAsync());
+            var specificFlight = _flightService.GetAllQueryable();
+            if (departureCity is not null)
+            {
+                specificFlight = _context.Flights.Where(flight => flight.DepartureCity == departureCity)
+                                                 .Where(flight => flight.ArrivalCity == arrivalCity)
+                                                 .Where(flight => flight.departureDate.Date == departureDate.Date);
+            }
+            if (specificFlight == null)
+            {
+                return NotFound();
+            }
+
+            return View(await specificFlight.ToListAsync());
         }
 
         // GET: Flights/Details/5
@@ -64,10 +78,11 @@ namespace BookingFlights
                
                 flight.Id = Guid.NewGuid();
                 
-                for (int i = 1; i <= 5; i++)
+                for (int i = 1; i <= 25; i++)
                 {
-                    Seat seat = new Seat { Number = i, isAvailable = true ,FlightId=flight.Id };
+                    Seat seat = new Seat { Number = i, isAvailable = false ,FlightId=flight.Id };
                     flight.Seats.Add(seat);
+                    await _seatService.SaveAsync();
                 }
                 _flightService.CreateFromEntity(flight);
                 await _flightService.SaveAsync();
@@ -154,6 +169,10 @@ namespace BookingFlights
 
             var flight = await _flightService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             _flightService.DeleteFromEntity(flight);
+           
+            var seat = await _seatService.GetAllQueryable().FirstOrDefaultAsync(m => m.FlightId == id);
+            _seatService.DeleteFromEntity(seat);
+            await _seatService.SaveAsync();
             await _flightService.SaveAsync();
 
             return RedirectToAction(nameof(Index));

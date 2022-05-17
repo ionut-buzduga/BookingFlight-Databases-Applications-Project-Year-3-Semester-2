@@ -7,22 +7,37 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
+using BookingFlights.Abstractions.Services;
 
 namespace BookingFlights.Controllers
 {
     public class SeatsController : Controller
     {
         private readonly BookingFlightsDbContext _context;
+        private readonly ISeatService _seatService;
+        private readonly IFlightService _flightService;
 
-        public SeatsController(BookingFlightsDbContext context)
+        public SeatsController(BookingFlightsDbContext context, ISeatService seatService, IFlightService flightService)
         {
             _context = context;
+            _seatService = seatService;
+            _flightService = flightService;
         }
 
         // GET: Seats
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid id)
         {
-            return View(await _context.Seats.ToListAsync());
+            var seats = _seatService.GetAllQueryable();
+            if (id != null)
+            {
+                seats = _seatService.GetByCondition(seats => seats.FlightId == id);
+                return View(await seats.ToListAsync());
+            }
+            else {
+                var flights = _flightService.GetAllQueryable();
+                return View(await flights.ToListAsync());
+            }
+            
         }
 
         // GET: Seats/Details/5
@@ -87,18 +102,21 @@ namespace BookingFlights.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Number,isAvailable,Id")] Seat seat)
+
+        public async Task<IActionResult> Edit(Guid id, [Bind("Number,isAvailable,Id")] Seat seat,Flight flight)
         {
+            var seats = _seatService.GetAllQueryable();
             if (id != seat.Id)
             {
                 return NotFound();
             }
-
+           
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(seat);
+                    _context.Entry(seat).Property(u => u.FlightId).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -112,9 +130,11 @@ namespace BookingFlights.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(seat);
+            
+            return View();
         }
 
         // GET: Seats/Delete/5

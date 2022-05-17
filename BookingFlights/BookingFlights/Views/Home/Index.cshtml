@@ -1,8 +1,47 @@
-﻿@{
+﻿@using BookingFlights.DataModel
+@model Flight
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width"/>
+<style>
 
-<div class="text-center">
+body {
+    font-family: 'Lato', sans-serif;
+    /*background-image: url('https://images.unsplash.com/photo-1606768666853-403c90a981ad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;*/
+}
+
+label {
+    color: #333;
+}
+
+.btn-send {
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    width: 80%;
+    margin-left: 3px;
+    }
+.help-block.with-errors {
+    color: #ff5050;
+    margin-top: 5px;
+
+}
+
+.card{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+</style>
+</head>
+@*<div class="text-center">
     @using(Html.BeginForm("Index","FlightsUser",FormMethod.Get))
     {
    <b>Departure City:</b> 
@@ -15,4 +54,43 @@
     <input type="date" id="DepartureDate" name="DepartureDate">
     <input type="submit" value="Search Flights" />
     }
-</div>
+</div>*@
+<body>
+    <div id="form-wrapper" style="max-width:980px;margin:auto;left: 10px;z-index:12">
+      <div class="col-lg-7 mx-auto">
+        <div class="card mt-2 mx-auto p-4 bg-light">
+            <div class="card-body bg-light">
+                <div class="container container-search p-5">
+                    <form asp-controller="Flights" asp-action="Index" method="GET">
+    
+                    <div class="row">
+                        <div class="form-floating col-md-6 pb-1">
+                            <input asp-for="DepartureCity" type="text" id="form1" class="form-control" placeholder="Leaving from">
+                            <label for="form1">Search Departure City<i class="bi bi-geo-alt-fill"></i> </label>
+                        </div>
+
+                        <div class="form-floating col-md-6 pb-1">
+                            <input asp-for="ArrivalCity" type="text" id="form2" class="form-control" placeholder="Arriving at">
+                            <label for="form1">Search Arrival City<i class="bi bi-geo-alt-fill"></i> </label>
+                        </div>
+
+                        <div class="form-group col-md-6 pb-1">
+                            <div class="form-group">
+                                <input asp-for="departureDate" class="form-control" type="date">
+                                <span class="form-label">Departure Date</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-success btn-send  pt-2 btn-block" value="Search flight">
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+     </div>
+   </div>
+
+</body>
+</html>

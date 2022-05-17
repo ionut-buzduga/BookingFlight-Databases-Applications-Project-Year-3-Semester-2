@@ -16,7 +16,7 @@ namespace BookingFlights.Abstractions.Services
         public void UpdateFromEntity(Flight flight);
 
         public void DeleteFromEntity(Flight flight);
-       
+
         System.Threading.Tasks.Task SaveAsync();
         //  void FlightFromEntity(Flight flight);
         //  void DeleteFromEntity(Flight flight);
