@@ -14,5 +14,9 @@ namespace BookingFlights.DataAccess
         {
         }
 
+        public void SeatForFlight(Seat seat)
+        {
+            dbContext.Entry(seat).Property(u => u.FlightId).IsModified = false;
+        }
     }
 }

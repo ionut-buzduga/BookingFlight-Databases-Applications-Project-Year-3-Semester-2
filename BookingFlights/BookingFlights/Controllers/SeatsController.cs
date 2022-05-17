@@ -13,13 +13,13 @@ namespace BookingFlights.Controllers
 {
     public class SeatsController : Controller
     {
-        private readonly BookingFlightsDbContext _context;
+        
         private readonly ISeatService _seatService;
         private readonly IFlightService _flightService;
 
-        public SeatsController(BookingFlightsDbContext context, ISeatService seatService, IFlightService flightService)
+        public SeatsController(ISeatService seatService, IFlightService flightService)
         {
-            _context = context;
+           
             _seatService = seatService;
             _flightService = flightService;
         }
@@ -48,7 +48,7 @@ namespace BookingFlights.Controllers
                 return NotFound();
             }
 
-            var seat = await _context.Seats
+            var seat = await _seatService.GetAllQueryable()
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (seat == null)
             {
@@ -73,9 +73,9 @@ namespace BookingFlights.Controllers
         {
             if (ModelState.IsValid)
             {
-                seat.Id = Guid.NewGuid();
-                _context.Add(seat);
-                await _context.SaveChangesAsync();
+               seat.Id = Guid.NewGuid();
+                _seatService.CreateFromEntity(seat);
+                await _seatService.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(seat);
@@ -89,7 +89,7 @@ namespace BookingFlights.Controllers
                 return NotFound();
             }
 
-            var seat = await _context.Seats.FindAsync(id);
+            var seat = await _seatService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             if (seat == null)
             {
                 return NotFound();
@@ -115,9 +115,10 @@ namespace BookingFlights.Controllers
             {
                 try
                 {
-                    _context.Update(seat);
-                    _context.Entry(seat).Property(u => u.FlightId).IsModified = false;
-                    await _context.SaveChangesAsync();
+                    _seatService.UpdateFromEntity(seat);
+                    //_context.Entry(seat).Property(u => u.FlightId).IsModified = false;
+                    _seatService.SeatForFLight(seat);
+                    await _seatService.SaveAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -145,8 +146,7 @@ namespace BookingFlights.Controllers
                 return NotFound();
             }
 
-            var seat = await _context.Seats
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var seat = await _seatService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             if (seat == null)
             {
                 return NotFound();
@@ -160,15 +160,15 @@ namespace BookingFlights.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var seat = await _context.Seats.FindAsync(id);
-            _context.Seats.Remove(seat);
-            await _context.SaveChangesAsync();
+            var seat = await _seatService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            _seatService.DeleteFromEntity(seat);
+            await _seatService.SaveAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SeatExists(Guid id)
         {
-            return _context.Seats.Any(e => e.Id == id);
+            return _seatService.GetAllQueryable().Any(m => m.Id == id);
         }
     }
 }

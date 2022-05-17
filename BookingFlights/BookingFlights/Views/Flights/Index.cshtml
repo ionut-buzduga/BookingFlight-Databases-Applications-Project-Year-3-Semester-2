@@ -70,12 +70,17 @@
 </table>
 @foreach (var item in Model) {
     <div class="card w-75" style="padding: 7px; margin: 10px; max-width:600px">
-      <div class="card-body">
-        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-        <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.DepartureCity) @Html.DisplayFor(modelItem => item.ArrivalCity)</h6>
-        <p class="card-text">@Html.DisplayFor(modelItem => item.departureDate)</p>
-        <a class="card-link"><a asp-action="Details" asp-route-id="@item.Id">View</a></a>
-        <a class ="card-link"><a href="Tickets/Index">Book Flight</a>
-      </div>
+        <div class="card-body">
+            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+            <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.DepartureCity) @Html.DisplayFor(modelItem => item.ArrivalCity)</h6>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.departureDate)</p>
+            <a class="card-link"><a asp-action="Details" asp-route-id="@item.Id">View</a></a>
+            @*<a class ="card-link"><a href="Tickets/Index">Book Flight</a>*@
+            <form method="get" action="Seats">
+
+                <input type="hidden" value="@item.Id" name="id" />
+                <input type="submit" value="Book Flight" />
+            </form>
+        </div>
     </div>
 }

@@ -9,6 +9,6 @@ namespace BookingFlights.Abstractions.Repository
 {
     public interface ISeatsRepository : IBaseRepository<Seat>
     {
-
+        void SeatForFlight(Seat seat);
     }
 }

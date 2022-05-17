@@ -35,10 +35,25 @@ namespace BookingFlights.AppLogic.Services
             _repositoryWrapper.SeatsRepository.Delete(seat);
         }
 
-        public async System.Threading.Tasks.Task SaveAsync()
+        public void CreateFromEntity(Seat seat)
         {
-            await _repositoryWrapper.PassengersRepository.SaveAsync();
+            _repositoryWrapper.SeatsRepository.Add(seat);
+
         }
 
+        public void UpdateFromEntity(Seat seat)
+        {
+            _repositoryWrapper.SeatsRepository.Update(seat);
+        }
+
+        public async System.Threading.Tasks.Task SaveAsync()
+        {
+            await _repositoryWrapper.SeatsRepository.SaveAsync();
+        }
+
+        public void SeatForFLight(Seat seat)
+        {
+            _repositoryWrapper.SeatsRepository.SeatForFlight(seat);
+        }
     }
 }

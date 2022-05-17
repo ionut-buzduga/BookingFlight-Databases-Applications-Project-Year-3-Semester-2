@@ -17,10 +17,12 @@ namespace BookingFlights.Abstractions.Services
 
         IQueryable<Seat> GetByCondition(Expression<Func<Seat, bool>> expression);
 
+        void CreateFromEntity(Seat seat);
+        public void UpdateFromEntity(Seat seat);
+
         public void DeleteFromEntity(Seat seat);
 
         System.Threading.Tasks.Task SaveAsync();
-
-
+        void SeatForFLight(Seat seat);
     }
 }
