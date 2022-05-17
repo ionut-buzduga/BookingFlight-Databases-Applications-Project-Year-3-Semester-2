@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,17 +15,29 @@ namespace BookingFlights
     public class FlightsController : Controller
     {  
         private readonly IFlightService _flightService;
-        public FlightsController(IFlightService flightService)
+        private readonly BookingFlightsDbContext _context;
+        public FlightsController(IFlightService flightService, BookingFlightsDbContext context)
         {
-            
+            _context = context;
             _flightService = flightService;
         }
 
         // GET: Flights
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string departureCity, string arrivalCity, DateTime departureDate)
         {
-            var flights = _flightService.GetAllQueryable();
-            return View(await flights.ToListAsync());
+            var specificFlight = _flightService.GetAllQueryable();
+            if (departureCity is not null)
+            {
+                specificFlight = _context.Flights.Where(flight => flight.DepartureCity == departureCity)
+                                                 .Where(flight => flight.ArrivalCity == arrivalCity)
+                                                 .Where(flight => flight.departureDate.Date == departureDate.Date);
+            }
+            if (specificFlight == null)
+            {
+                return NotFound();
+            }
+
+            return View(await specificFlight.ToListAsync());
         }
 
         // GET: Flights/Details/5

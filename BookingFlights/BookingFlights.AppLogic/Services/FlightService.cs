@@ -21,7 +21,7 @@ namespace BookingFlights.AppLogic.Services
 
        public IQueryable<Flight> GetAllQueryable()
         {
-            return _repositoryWrapper.FlightsRepository.GetAll().Include(flight => flight.Seats);
+            return _repositoryWrapper.FlightsRepository.GetAll();
         }
 
 
