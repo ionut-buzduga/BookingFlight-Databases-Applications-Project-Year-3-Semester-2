@@ -49,11 +49,13 @@ namespace BookingFlights
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddScoped<IFlightsRepository, FlightRepository>();
-            //services.AddScoped<IPassengersRepository, PassengerRepository>();
-            //services.AddScoped<IFlightService, FlightService>();
-            //services.AddScoped<IPassengerService, PassengerService>();
-            //services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<IFlightsRepository, FlightRepository>();
+            services.AddScoped<IPassengersRepository, PassengerRepository>();
+            services.AddScoped<IFlightService, FlightService>();
+            services.AddScoped<IPassengerService, PassengerService>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<ISeatService, SeatService>();
+            services.AddScoped<ISeatsRepository,SeatRepository>();
             //services.AddControllersWithViews();
 
             services.Configure<IdentityOptions>(options =>

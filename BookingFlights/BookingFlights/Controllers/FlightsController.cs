@@ -16,7 +16,8 @@ namespace BookingFlights
     {  
         private readonly IFlightService _flightService;
         private readonly ISeatService _seatService;
-        public FlightsController(IFlightService flightService , ISeatService seatService)
+        private readonly BookingFlightsDbContext _context;
+        public FlightsController(BookingFlightsDbContext context, IFlightService flightService , ISeatService seatService)
         {
             _context = context;
             _flightService = flightService;
