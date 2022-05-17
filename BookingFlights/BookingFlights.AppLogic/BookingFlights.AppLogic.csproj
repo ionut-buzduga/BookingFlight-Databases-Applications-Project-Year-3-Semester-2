@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.16" />
+  </ItemGroup>
   <ItemGroup>
 	<ProjectReference Include="..\BookingFlights.Abstractions\BookingFlights.Abstractions.csproj" />
 	<ProjectReference Include="..\BookingFlights.DataAccess\BookingFlights.DataAccess.csproj" />
