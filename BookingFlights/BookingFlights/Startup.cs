@@ -3,7 +3,6 @@ using BookingFlights.Abstractions.Services;
 using BookingFlights.AppLogic.Services;
 using BookingFlights.Data;
 using BookingFlights.DataAccess;
-using BookingFlights.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,13 +31,6 @@ namespace BookingFlights
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("IdentityConnection")));
@@ -49,32 +41,17 @@ namespace BookingFlights
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddScoped<IFlightsRepository, FlightRepository>();
-            //services.AddScoped<IPassengersRepository, PassengerRepository>();
-            //services.AddScoped<IFlightService, FlightService>();
-            //services.AddScoped<IPassengerService, PassengerService>();
-            //services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-            //services.AddControllersWithViews();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredUniqueChars = 6;
+            services.AddScoped<IFlightsRepository, FlightRepository>();
+            services.AddScoped<IPassengersRepository, PassengerRepository>();
+            services.AddScoped<IFlightService, FlightService>();
+            services.AddScoped<IPassengerService, PassengerService>();
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddControllersWithViews();
 
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
-                options.Lockout.AllowedForNewUsers = true;
-
-                // User Settings
-                options.User.RequireUniqueEmail = true;
-            });
-
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
