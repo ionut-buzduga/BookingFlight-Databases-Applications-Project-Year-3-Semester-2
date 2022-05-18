@@ -23,8 +23,11 @@ namespace BookingFlights.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index(string flightName)
+        public async Task<IActionResult> Index(Guid id)
         {
+            Booking booking = new Booking{ UserName = "mitrica", FlightId = id};
+            _context.Add(booking);
+            await _context.SaveChangesAsync();
             var tickets = _ticketService.GetAllQueryable();
             return View(await tickets.ToListAsync());
         }

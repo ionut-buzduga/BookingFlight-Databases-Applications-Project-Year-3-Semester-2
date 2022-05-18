@@ -8,11 +8,6 @@ namespace BookingFlights.DataModel
 {
     public class Flight: EntityClass
     {
-        public Flight()
-        {
-            this.Passengers = new HashSet<Passenger>();
-        }
-
         public string Name { get; set; }
 
         public string DepartureCity { get; set; }
@@ -24,7 +19,5 @@ namespace BookingFlights.DataModel
         public DateTime arrivalDate { get; set; }
 
         public ICollection<Seat> Seats { get; set; } = new List<Seat>(30);
-
-        public ICollection<Passenger> Passengers { get; set; }
     }
 }

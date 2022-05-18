@@ -8,9 +8,12 @@ namespace BookingFlights.DataModel
 {
     public class Booking: EntityClass
     {
+        public string UserName { get; set; }
 
         public Guid FlightId { get; set; }
 
-        public Guid TicketId { get; set; }  
+        public Guid SeatId { get; set; }
+
+        public Guid TicketId { get; set; }
     }
 }

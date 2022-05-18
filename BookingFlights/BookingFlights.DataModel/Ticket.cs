@@ -14,7 +14,5 @@ namespace BookingFlights.DataModel
         public int Price { get; set; }
 
         public Guid FlightId  { get; set; }
-
-        public ICollection<Seat> Seat { get; set; } 
     }
 }

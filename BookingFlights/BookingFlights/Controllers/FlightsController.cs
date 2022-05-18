@@ -80,10 +80,9 @@ namespace BookingFlights
 
                
                 flight.Id = Guid.NewGuid();
-                Ticket ticket = new Ticket { FlightId = flight.Id, Price = 0, Type = "base" };
                 for (int i = 1; i <= 25; i++)
                 {
-                    Seat seat = new Seat { Number = i, isAvailable = false ,FlightId=flight.Id, Ticket = ticket, TicketId = ticket.Id };
+                    Seat seat = new Seat { Number = i, isAvailable = false ,FlightId=flight.Id};
                     flight.Seats.Add(seat);
                     await _seatService.SaveAsync();
                 }
@@ -175,13 +174,10 @@ namespace BookingFlights
            
             var seat = await _seatService.GetAllQueryable().FirstOrDefaultAsync(m => m.FlightId == id);
 
-            var ticket = await _ticketService.GetAllQueryable().FirstOrDefaultAsync(m => m.FlightId == id);
             _seatService.DeleteFromEntity(seat);
-            _ticketService.DeleteFromEntity(ticket);
 
             await _seatService.SaveAsync();
             await _flightService.SaveAsync();
-            await _ticketService.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }

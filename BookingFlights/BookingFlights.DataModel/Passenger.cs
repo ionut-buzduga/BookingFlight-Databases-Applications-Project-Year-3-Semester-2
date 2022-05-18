@@ -9,11 +9,6 @@ namespace BookingFlights.DataModel
 {
     public class Passenger: EntityClass
     {
-        public Passenger()
-        {
-            this.Flights = new HashSet<Flight>();  
-        }
-
         public string PassengerName { get; set; }
 
         public string PassengerSurname { get; set; }
@@ -21,10 +16,5 @@ namespace BookingFlights.DataModel
         public string Email { get; set; }
 
         public string Telephone { get; set; }
-
-        public Seat Seat { get; set; }
-
-        [Required]
-        public ICollection<Flight> Flights { get; set; } 
     }
 }

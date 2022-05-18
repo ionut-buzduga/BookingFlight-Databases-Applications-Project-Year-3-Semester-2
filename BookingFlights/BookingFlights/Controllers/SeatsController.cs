@@ -16,28 +16,26 @@ namespace BookingFlights.Controllers
         
         private readonly ISeatService _seatService;
         private readonly IFlightService _flightService;
+        private readonly BookingFlightsDbContext _context;
 
-        public SeatsController(ISeatService seatService, IFlightService flightService)
+        public SeatsController(ISeatService seatService, IFlightService flightService, BookingFlightsDbContext _context)
         {
            
             _seatService = seatService;
             _flightService = flightService;
+            this._context = _context;
         }
 
         // GET: Seats
-        public async Task<IActionResult> Index(Guid id)
+        public async Task<IActionResult> Index(Guid FlightId,Guid TicketId)
         {
             var seats = _seatService.GetAllQueryable();
-            if (id != null)
-            {
-                seats = _seatService.GetByCondition(seats => seats.FlightId == id);
-                return View(await seats.ToListAsync());
-            }
-            else {
-                var flights = _flightService.GetAllQueryable();
-                return View(await flights.ToListAsync());
-            }
-            
+
+            Booking booking = _context.Booking.First(booking => booking.FlightId == FlightId);
+
+            booking.TicketId = TicketId;
+            _context.SaveChanges();
+            return View(await seats.ToListAsync());
         }
 
         // GET: Seats/Details/5
@@ -131,8 +129,11 @@ namespace BookingFlights.Controllers
                         throw;
                     }
                 }
-                
-                return RedirectToAction(nameof(Index));
+                Booking booking = _context.Booking.First(booking => booking.UserName == "mitrica");
+
+                booking.SeatId = seat.Id;
+                _context.SaveChanges();
+                return RedirectToAction("Index","Home");
             }
             
             return View();
