@@ -26,7 +26,7 @@ namespace BookingFlights.Controllers
             this._bookingService = bookingService;
         }
 
-        [Authorize]
+        [Authorize(Roles ="User")]
         // GET: Tickets
         public async Task<IActionResult> Index(Guid id)
         {
@@ -39,8 +39,6 @@ namespace BookingFlights.Controllers
             {
                 Booking booking = new Booking { UserName = userEmail, FlightId = id };
 
-                //_context.Add(booking);
-                //await _context.SaveChangesAsync();
                 _bookingService.CreateFromEntity(booking);
                 await _bookingService.SaveAsync();
                 var tickets = _ticketService.GetAllQueryable();
@@ -48,8 +46,15 @@ namespace BookingFlights.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Flights");
+                return RedirectToAction("Index", "Home");
             }
+        }
+
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> TicketAdmin()
+        {
+            var allTickets = _ticketService.GetAllQueryable();
+            return View(allTickets);
         }
 
         // GET: Tickets/Details/5
@@ -89,7 +94,7 @@ namespace BookingFlights.Controllers
                 ticket.Id = Guid.NewGuid();
                 _ticketService.CreateFromEntity(ticket);
                 await _ticketService.SaveAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(TicketAdmin));
             }
             return View(ticket);
         }
@@ -142,7 +147,7 @@ namespace BookingFlights.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(TicketAdmin));
             }
             return View(ticket);
         }
@@ -172,7 +177,7 @@ namespace BookingFlights.Controllers
             var ticket = await _ticketService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             _ticketService.DeleteFromEntity(ticket);
             await _ticketService.SaveAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(TicketAdmin));
         }
 
         private bool TicketExists(Guid id)

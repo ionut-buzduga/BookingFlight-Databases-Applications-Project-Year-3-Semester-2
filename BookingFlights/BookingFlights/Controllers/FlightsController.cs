@@ -35,6 +35,10 @@ namespace BookingFlights
                 {
                     return View(await specificFlight.ToListAsync());
                 }
+                else
+                {
+                    return RedirectToAction("Index","Home");
+                }
                 
                
             }
