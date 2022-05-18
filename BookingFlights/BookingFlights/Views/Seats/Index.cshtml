@@ -9,6 +9,7 @@
         grid-template-columns: repeat(5, 1fr);
         grid-auto-columns: auto;
         grid-row-gap: 40px;
+        background-color:white;
     }
 
     table, th {
@@ -16,8 +17,8 @@
        
     }
 
-    td {
-        border: 1px solid white ;
+    td#td2 {
+        border: 2px solid green;
        
     }
 
@@ -65,16 +66,16 @@
         <tr>
             @if (item.isAvailable == false)
             {
-                <td>
+                <td id="td2">
                     @Html.DisplayFor(modelItem => item.Number)
                 </td>
-                <td>
+                <td id="td2">
                     @Html.DisplayFor(modelItem => item.isAvailable)
                 </td>
                 @*<td>
                 @Html.DisplayFor(modelItem => item.FlightId)
             </td>*@
-                <td>
+                <td id="td2">
                     <a asp-action="Edit" asp-route-id="@item.Id">Reserve</a>
                     @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
