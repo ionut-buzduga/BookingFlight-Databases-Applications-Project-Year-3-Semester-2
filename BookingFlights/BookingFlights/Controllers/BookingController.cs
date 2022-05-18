@@ -17,10 +17,12 @@ namespace BookingFlights.Controllers
     public class BookingController : Controller
     {
         private readonly IBookingService _bookingService;
-
-        public BookingController(IBookingService bookingService)
+        private readonly IFlightService _flightService;
+       
+        public BookingController(IBookingService bookingService, IFlightService flightService)
         {
             _bookingService = bookingService;
+            _flightService = flightService;
         }
 
         [Authorize]
@@ -33,6 +35,13 @@ namespace BookingFlights.Controllers
             return View(booking);
         }
 
-
+        public ActionResult IndexViewData()
+        {
+            ViewBag.Message = "Welcome to my demo!";
+            ViewData["Flights"] = _flightService.GetAllQueryable();
+            //ViewData["Seats"] = GetStudents();
+            //ViewData["Tickets"] = GetStudents();
+            return View();
+        }
     }
 }
