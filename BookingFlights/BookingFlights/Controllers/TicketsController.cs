@@ -30,6 +30,7 @@ namespace BookingFlights.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index(Guid id)
         {
+
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
             var isBooked = _bookingService.GetByCondition(booking => booking.FlightId == id && booking.UserName == userEmail);
@@ -47,12 +48,12 @@ namespace BookingFlights.Controllers
             }
             else
             {
-                TempData["Message"] = "This user already booked a flight";
                 return RedirectToAction("Index", "Flights");
             }
         }
 
         // GET: Tickets/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -68,13 +69,6 @@ namespace BookingFlights.Controllers
             }
 
             return View(tickets);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> chooseTicket1(Guid id)
-        {
-            
-            return Redirect("/Seat/Index");
         }
 
         // GET: Tickets/Create

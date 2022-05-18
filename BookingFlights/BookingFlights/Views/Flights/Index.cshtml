@@ -5,80 +5,78 @@
 }
 
 <h1>FLIGHTS LIST </h1>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DepartureCity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ArrivalCity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.departureDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.arrivalDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DepartureCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArrivalCity)
+                    </td>
+                    <td>
+                        @Convert.ToString(string.Format("{0:hh:mm tt}", item.departureDate))
+                    </td>
+                    <td>
+                        @Convert.ToString(string.Format("{0:hh:mm tt}", item.arrivalDate))
+                    </td>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DepartureCity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalCity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.departureDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.arrivalDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DepartureCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArrivalCity)
-            </td>
-            <td>
-                @Convert.ToString(string.Format("{0:hh:mm tt}", item.departureDate))
-            </td>
-            <td>
-                @Convert.ToString(string.Format("{0:hh:mm tt}", item.arrivalDate))
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Seats)
-            </td>
-             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-            @*<td>
-                @using (Html.BeginForm("Index", "Tickets", FormMethod.Get))
-                {
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Seats)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}else{
+    @foreach (var item in Model)
+    {
+        <div class="card w-75" style="padding: 7px; margin: 10px; max-width:600px">
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.DepartureCity) @Html.DisplayFor(modelItem => item.ArrivalCity)</h6>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.departureDate)</p>
+                <a class="card-link"><a asp-action="Details" asp-route-id="@item.Id">View</a></a>
+                <form method="index" action="Tickets">
+                    <input type="hidden" value="@item.Id" name="id" />
                     <input type="submit" value="Book Flight" />
-                }
-            </td>*@
-        </tr>
-}
-    </tbody>
-</table>
-@foreach (var item in Model) {
-    <div class="card w-75" style="padding: 7px; margin: 10px; max-width:600px">
-        <div class="card-body">
-            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-            <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.DepartureCity) @Html.DisplayFor(modelItem => item.ArrivalCity)</h6>
-            <p class="card-text">@Html.DisplayFor(modelItem => item.departureDate)</p>
-            <a class="card-link"><a asp-action="Details" asp-route-id="@item.Id">View</a></a>
-            <form method="index" action="Tickets">
-                <input type="hidden" value="@item.Id" name="id" />
-                <input type="submit" value="Book Flight" />
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
+    }
 }

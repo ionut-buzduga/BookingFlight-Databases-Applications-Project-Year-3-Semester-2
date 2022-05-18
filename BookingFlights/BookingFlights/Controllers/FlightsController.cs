@@ -35,16 +35,11 @@ namespace BookingFlights
                 {
                     return View(await specificFlight.ToListAsync());
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                
                
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            var allFlights = _flightService.GetAllQueryable();
+            return View(allFlights);
         }
 
 

@@ -44,6 +44,7 @@ namespace BookingFlights.Controllers
         }
 
         // GET: Seats/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
