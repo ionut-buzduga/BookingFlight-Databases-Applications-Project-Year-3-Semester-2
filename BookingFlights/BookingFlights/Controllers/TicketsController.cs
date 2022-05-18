@@ -37,8 +37,10 @@ namespace BookingFlights.Controllers
             if (!isBooked.Any())
             {
                 Booking booking = new Booking { UserName = userEmail, FlightId = id };
-                _context.Add(booking);
-                await _context.SaveChangesAsync();
+
+                
+                _bookingService.CreateFromEntity(booking);
+                await _ticketService.SaveAsync();
                 var tickets = _ticketService.GetAllQueryable();
                 return View(await tickets.ToListAsync());
             }
