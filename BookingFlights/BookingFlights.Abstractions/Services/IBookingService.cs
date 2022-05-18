@@ -20,7 +20,7 @@ namespace BookingFlights.Abstractions.Services
 
         System.Threading.Tasks.Task SaveAsync();
 
-        Booking FindUser(Guid FlightId);
+        Booking FindUser(Guid FlightId,string userMail);
         Booking FindEmail(string userEmail);
     }
 }

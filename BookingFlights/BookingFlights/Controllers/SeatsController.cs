@@ -19,11 +19,14 @@ namespace BookingFlights.Controllers
         private readonly ISeatService _seatService;
         private readonly IFlightService _flightService;
         private readonly IBookingService _bookingService;
-        public SeatsController(ISeatService seatService, IFlightService flightService)
+        private readonly BookingFlightsDbContext _context;
+        public SeatsController(ISeatService seatService, IFlightService flightService, IBookingService bookingService, BookingFlightsDbContext context)
         {
            
             _seatService = seatService;
             _flightService = flightService;
+            _bookingService = bookingService;
+            _context = context;
         }
 
         // GET: Seats
@@ -31,10 +34,12 @@ namespace BookingFlights.Controllers
         {
             var seats = _seatService.GetAllQueryable();
 
-            Booking booking = _bookingService.FindUser(FlightId);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            Booking booking = _bookingService.FindUser(FlightId,userEmail);
 
             booking.TicketId = TicketId;
-            await _bookingService.SaveAsync();
+            _context.SaveChanges();
             return View(await seats.ToListAsync());
         }
 

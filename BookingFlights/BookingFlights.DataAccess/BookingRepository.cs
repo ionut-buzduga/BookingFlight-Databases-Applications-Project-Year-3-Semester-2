@@ -20,9 +20,9 @@ namespace BookingFlights.DataAccess
             return dbContext.Booking.First(booking => booking.UserName == userEmail);
         }
 
-        public Booking FindUser(Guid flightId)
+        public Booking FindUser(Guid flightId,String userMail)
         {
-           return dbContext.Booking.First(booking => booking.FlightId == flightId);
+           return dbContext.Booking.First(booking => booking.FlightId == flightId && booking.UserName == userMail);
         }
     }
 }

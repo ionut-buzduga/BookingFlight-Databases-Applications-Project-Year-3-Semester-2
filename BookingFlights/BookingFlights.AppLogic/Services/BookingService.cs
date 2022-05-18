@@ -49,9 +49,9 @@ namespace BookingFlights.AppLogic.Services
             await _repositoryWrapper.BookingRepository.SaveAsync();
         }
 
-        public Booking FindUser(Guid FlightId)
+        public Booking FindUser(Guid FlightId,String userMail)
         {
-            return _repositoryWrapper.BookingRepository.FindUser(FlightId);
+            return _repositoryWrapper.BookingRepository.FindUser(FlightId,userMail);
         }
 
         public Booking FindEmail(string userEmail)
