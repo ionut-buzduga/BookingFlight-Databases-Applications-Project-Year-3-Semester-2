@@ -4,10 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Your Bookings</h1>
 
 
-
+<head>
+    <link rel="stylesheet" href="~/css/booking.css" asp-append-version="true" />
+</head>
 
 <table class="table">
     <thead>
@@ -32,10 +34,14 @@
 
                         <input type="submit" value="Flight Details" />
                     </form>
+                </td>
+                <td>
                     <form action="Seats/Details/@item.SeatId">
 
                         <input type="submit" value="Seat Details" />
                     </form>
+                </td>
+                <td>
                     <form action="Tickets/Details/@item.TicketId">
 
                         <input type="submit" value="Ticket Details" />

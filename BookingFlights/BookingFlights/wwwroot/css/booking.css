@@ -1,0 +1,18 @@
+input[type=submit] {
+    background-color: #008CBA;
+    color: black;
+    border: 2px solid #008CBA;
+    padding: 0px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+    input[type=submit]:hover {
+        background-color: white;
+        color: black;
+    }
