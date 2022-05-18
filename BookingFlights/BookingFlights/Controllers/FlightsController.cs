@@ -47,6 +47,8 @@ namespace BookingFlights
             }
         }
 
+
+        
         // GET: Flights/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

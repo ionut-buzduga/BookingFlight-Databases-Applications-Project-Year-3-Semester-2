@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
 using BookingFlights.Abstractions.Services;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingFlights.Controllers
 {
@@ -100,7 +102,7 @@ namespace BookingFlights.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
+        [Authorize]
         public async Task<IActionResult> Edit(Guid id, [Bind("Number,isAvailable,Id")] Seat seat,Flight flight)
         {
             var seats = _seatService.GetAllQueryable();
@@ -129,7 +131,9 @@ namespace BookingFlights.Controllers
                         throw;
                     }
                 }
-                Booking booking = _context.Booking.First(booking => booking.UserName == "mitrica");
+
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                Booking booking = _context.Booking.First(booking => booking.UserName == userEmail);
 
                 booking.SeatId = seat.Id;
                 _context.SaveChanges();

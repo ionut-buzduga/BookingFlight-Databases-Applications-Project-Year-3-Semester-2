@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
 using BookingFlights.Abstractions.Services;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingFlights.Controllers
 {
@@ -18,13 +20,15 @@ namespace BookingFlights.Controllers
 
         public BookingController(IBookingService bookingService)
         {
-            //_context = context;
             _bookingService = bookingService;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-            var booking = _bookingService.GetByCondition(booking => booking.UserName=="mitrica");
+            var userId = User.FindFirstValue(ClaimTypes.Email);
+
+            var booking = _bookingService.GetByCondition(booking => booking.UserName== userId);
 
             return View(booking);
         }

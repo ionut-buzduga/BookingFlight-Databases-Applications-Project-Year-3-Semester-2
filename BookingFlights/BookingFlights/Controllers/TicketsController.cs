@@ -8,28 +8,45 @@ using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
 using BookingFlights.Abstractions.Services;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingFlights.Controllers
 {
     public class TicketsController : Controller
     {
         private readonly ITicketService _ticketService;
+        private readonly IBookingService _bookingService;
         private readonly BookingFlightsDbContext _context;
 
-        public TicketsController(BookingFlightsDbContext context, ITicketService _ticketService)
+        public TicketsController(BookingFlightsDbContext context, ITicketService _ticketService, IBookingService bookingService)
         {
             _context = context;
             this._ticketService = _ticketService;
+            this._bookingService = bookingService;
         }
 
+        [Authorize]
         // GET: Tickets
         public async Task<IActionResult> Index(Guid id)
         {
-            Booking booking = new Booking{ UserName = "mitrica", FlightId = id};
-            _context.Add(booking);
-            await _context.SaveChangesAsync();
-            var tickets = _ticketService.GetAllQueryable();
-            return View(await tickets.ToListAsync());
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            var isBooked = _bookingService.GetByCondition(booking => booking.FlightId == id && booking.UserName == userEmail);
+
+            if (!isBooked.Any())
+            {
+                Booking booking = new Booking { UserName = userEmail, FlightId = id };
+                _context.Add(booking);
+                await _context.SaveChangesAsync();
+                var tickets = _ticketService.GetAllQueryable();
+                return View(await tickets.ToListAsync());
+            }
+            else
+            {
+                TempData["Message"] = "This user already booked a flight";
+                return RedirectToAction("Index", "Flights");
+            }
         }
 
         // GET: Tickets/Details/5
