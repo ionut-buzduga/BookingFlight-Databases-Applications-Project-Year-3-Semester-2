@@ -1,53 +1,64 @@
-﻿@model BookingFlights.DataModel.Flight
+﻿
+@model BookingFlights.DataModel.Flight
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
-<div>
+<head>
+   
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+</head>
+
+
+<h1>Details for your booked flight</h1>
+
+
+<div id="wrapper">
     <h4>Flight</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DepartureCity)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DepartureCity)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ArrivalCity)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ArrivalCity)
         </dd>
-        <dt class = "col-sm-2">
-           DepartureDate
+        <dt class="col-sm-2">
+            DepartureDate
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.departureDate)
         </dd>
-        <dt class = "col-sm-2">
-           ArrivalDate
+        <dt class="col-sm-2">
+            ArrivalDate
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.arrivalDate)
         </dd>
+
     </dl>
-</div>
-<div>
-    
 
-    @*<form action="Booking">
-
-            <input type="submit" value="Back to List" />
-        </form>*@
-    <button onclick="history.back()">Go Back</button>
+    <button class="button button2" onclick="history.back()">Go Back</button>
+   
 </div>
+<!--<div>-->
+@*<form action="Booking">
+
+        <input type="submit" value="Back to List" />
+    </form>*@
+
+<!--</div>-->
