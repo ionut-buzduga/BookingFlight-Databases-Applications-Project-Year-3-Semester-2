@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace BookingFlights.DataModel
 
         public int Price { get; set; }
 
-        public Guid PassengerId { get; set; }
+        public Guid FlightId  { get; set; }
 
-        public Passenger Passenger { get; set; }
+        public ICollection<Seat> Seat { get; set; } 
     }
 }

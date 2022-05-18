@@ -56,6 +56,8 @@ namespace BookingFlights
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<ISeatsRepository,SeatRepository>();
+            services.AddScoped<ITicketService, TicketService>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
             //services.AddControllersWithViews();
 
             services.Configure<IdentityOptions>(options =>

@@ -135,8 +135,6 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 }
 </style>
 
-@if (SignInManager.IsSignedIn(User))
-{
 <ul class="tilesWrap">
 	<li>
 		<h2>01</h2>
@@ -146,7 +144,7 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 			industry. Lorem Ipsum has been the industry's standard dummy text ever 
 			since the 1500s.
 		</p>
-		<button>Choose</button>
+		<button><a asp-action="chooseTicket1">Choose</a></button>
 	</li>
 	<li>
 		<h2>02</h2>
@@ -166,9 +164,7 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 		<button>Choose</button>
 	</li>
 </ul>
-}
-else
-{
+
 	<p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -202,4 +198,3 @@ else
 }
     </tbody>
 </table>
-}

@@ -76,8 +76,7 @@
             <p class="card-text">@Html.DisplayFor(modelItem => item.departureDate)</p>
             <a class="card-link"><a asp-action="Details" asp-route-id="@item.Id">View</a></a>
             @*<a class ="card-link"><a href="Tickets/Index">Book Flight</a>*@
-            <form method="get" action="Seats">
-
+            <form method="index" action="Tickets">
                 <input type="hidden" value="@item.Id" name="id" />
                 <input type="submit" value="Book Flight" />
             </form>

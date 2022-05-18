@@ -4,14 +4,16 @@ using BookingFlights.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingFlights.DataAccess.Migrations
 {
     [DbContext(typeof(BookingFlightsDbContext))]
-    partial class BookingFlightsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220517200156_secMig")]
+    partial class secMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

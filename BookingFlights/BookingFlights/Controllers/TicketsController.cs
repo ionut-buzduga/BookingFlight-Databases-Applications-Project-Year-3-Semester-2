@@ -7,23 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
+using BookingFlights.Abstractions.Services;
 
 namespace BookingFlights.Controllers
 {
     public class TicketsController : Controller
     {
+        private readonly ITicketService _ticketService;
         private readonly BookingFlightsDbContext _context;
 
-        public TicketsController(BookingFlightsDbContext context)
+        public TicketsController(BookingFlightsDbContext context, ITicketService _ticketService)
         {
             _context = context;
+            this._ticketService = _ticketService;
         }
 
         // GET: Tickets
         public async Task<IActionResult> Index(string flightName)
-        { 
-            
-            return View(await _context.Tickets.ToListAsync());
+        {
+            var tickets = _ticketService.GetAllQueryable();
+            return View(await tickets.ToListAsync());
         }
 
         // GET: Tickets/Details/5
@@ -34,14 +37,21 @@ namespace BookingFlights.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ticket == null)
+            var tickets = await _ticketService.GetAllQueryable()
+               .FirstOrDefaultAsync(m => m.Id == id);
+            if (tickets == null)
             {
                 return NotFound();
             }
 
-            return View(ticket);
+            return View(tickets);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> chooseTicket1(Guid id)
+        {
+            
+            return Redirect("/Seat/Index");
         }
 
         // GET: Tickets/Create
@@ -55,13 +65,13 @@ namespace BookingFlights.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Type,Price,Id")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Type,Price,FlightId,Id")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
                 ticket.Id = Guid.NewGuid();
-                _context.Add(ticket);
-                await _context.SaveChangesAsync();
+                _ticketService.CreateFromEntity(ticket);
+                await _ticketService.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(ticket);
@@ -75,7 +85,7 @@ namespace BookingFlights.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets.FindAsync(id);
+            var ticket = await _ticketService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
                 return NotFound();
@@ -88,7 +98,7 @@ namespace BookingFlights.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Type,Price,Id")] Ticket ticket)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Type,Price,FlightId,Id")] Ticket ticket)
         {
             if (id != ticket.Id)
             {
@@ -99,8 +109,9 @@ namespace BookingFlights.Controllers
             {
                 try
                 {
-                    _context.Update(ticket);
-                    await _context.SaveChangesAsync();
+                    _ticketService.UpdateFromEntity(ticket);
+                    _context.Entry(ticket).Property(u => u.FlightId).IsModified = false;
+                    await _ticketService.SaveAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,8 +137,7 @@ namespace BookingFlights.Controllers
                 return NotFound();
             }
 
-            var ticket = await _context.Tickets
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var ticket = await _ticketService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
             if (ticket == null)
             {
                 return NotFound();
@@ -141,15 +151,15 @@ namespace BookingFlights.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var ticket = await _context.Tickets.FindAsync(id);
-            _context.Tickets.Remove(ticket);
-            await _context.SaveChangesAsync();
+            var ticket = await _ticketService.GetAllQueryable().FirstOrDefaultAsync(m => m.Id == id);
+            _ticketService.DeleteFromEntity(ticket);
+            await _ticketService.SaveAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketExists(Guid id)
         {
-            return _context.Tickets.Any(e => e.Id == id);
+            return _ticketService.GetAllQueryable().Any(m => m.Id == id);
         }
     }
 }

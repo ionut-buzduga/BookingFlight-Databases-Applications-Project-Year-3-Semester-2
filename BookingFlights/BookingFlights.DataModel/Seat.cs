@@ -14,5 +14,8 @@ namespace BookingFlights.DataModel
 
         public Guid FlightId { get; set; }
         public Flight Flight { get; set; }
+
+        public Guid TicketId { get; set; }
+        public Ticket Ticket { get; set; }
     }
 }

@@ -24,8 +24,6 @@ namespace BookingFlights.DataModel
 
         public Seat Seat { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; }
-
         [Required]
         public ICollection<Flight> Flights { get; set; } 
     }

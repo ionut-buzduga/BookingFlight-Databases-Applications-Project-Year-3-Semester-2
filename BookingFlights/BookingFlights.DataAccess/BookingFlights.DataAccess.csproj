@@ -24,4 +24,8 @@
     <ProjectReference Include="..\BookingFlights.Abstractions\BookingFlights.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
