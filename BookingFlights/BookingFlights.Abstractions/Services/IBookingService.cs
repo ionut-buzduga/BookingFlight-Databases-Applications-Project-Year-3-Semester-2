@@ -19,5 +19,8 @@ namespace BookingFlights.Abstractions.Services
         public void DeleteFromEntity(Booking booking);
 
         System.Threading.Tasks.Task SaveAsync();
+
+        Booking FindUser(Guid FlightId);
+        Booking FindEmail(string userEmail);
     }
 }

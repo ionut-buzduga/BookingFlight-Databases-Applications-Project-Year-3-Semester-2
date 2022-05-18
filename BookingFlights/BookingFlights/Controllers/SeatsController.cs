@@ -18,14 +18,12 @@ namespace BookingFlights.Controllers
         
         private readonly ISeatService _seatService;
         private readonly IFlightService _flightService;
-        private readonly BookingFlightsDbContext _context;
-
-        public SeatsController(ISeatService seatService, IFlightService flightService, BookingFlightsDbContext _context)
+        private readonly IBookingService _bookingService;
+        public SeatsController(ISeatService seatService, IFlightService flightService)
         {
            
             _seatService = seatService;
             _flightService = flightService;
-            this._context = _context;
         }
 
         // GET: Seats
@@ -33,10 +31,10 @@ namespace BookingFlights.Controllers
         {
             var seats = _seatService.GetAllQueryable();
 
-            Booking booking = _context.Booking.First(booking => booking.FlightId == FlightId);
+            Booking booking = _bookingService.FindUser(FlightId);
 
             booking.TicketId = TicketId;
-            _context.SaveChanges();
+            await _bookingService.SaveAsync();
             return View(await seats.ToListAsync());
         }
 
@@ -116,7 +114,6 @@ namespace BookingFlights.Controllers
                 try
                 {
                     _seatService.UpdateFromEntity(seat);
-                    //_context.Entry(seat).Property(u => u.FlightId).IsModified = false;
                     _seatService.SeatForFLight(seat);
                     await _seatService.SaveAsync();
                 }
@@ -133,10 +130,10 @@ namespace BookingFlights.Controllers
                 }
 
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
-                Booking booking = _context.Booking.First(booking => booking.UserName == userEmail);
 
+                Booking booking = _bookingService.FindEmail(userEmail);
                 booking.SeatId = seat.Id;
-                _context.SaveChanges();
+                await _bookingService.SaveAsync();
                 return RedirectToAction("Index","Home");
             }
             

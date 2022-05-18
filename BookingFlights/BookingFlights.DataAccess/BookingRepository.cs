@@ -14,5 +14,15 @@ namespace BookingFlights.DataAccess
         public BookingRepository(BookingFlightsDbContext dbContext) : base(dbContext)
         {
         }
+
+        public Booking FindEmail(string userEmail)
+        {
+            return dbContext.Booking.First(booking => booking.UserName == userEmail);
+        }
+
+        public Booking FindUser(Guid flightId)
+        {
+           return dbContext.Booking.First(booking => booking.FlightId == flightId);
+        }
     }
 }

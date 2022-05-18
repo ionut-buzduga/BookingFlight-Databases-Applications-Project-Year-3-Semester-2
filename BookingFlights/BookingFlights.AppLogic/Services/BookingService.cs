@@ -46,7 +46,17 @@ namespace BookingFlights.AppLogic.Services
 
         public async System.Threading.Tasks.Task SaveAsync()
         {
-            await _repositoryWrapper.TicketRepository.SaveAsync();
+            await _repositoryWrapper.BookingRepository.SaveAsync();
+        }
+
+        public Booking FindUser(Guid FlightId)
+        {
+            return _repositoryWrapper.BookingRepository.FindUser(FlightId);
+        }
+
+        public Booking FindEmail(string userEmail)
+        {
+            return _repositoryWrapper.BookingRepository.FindEmail(userEmail);
         }
     }
 }
