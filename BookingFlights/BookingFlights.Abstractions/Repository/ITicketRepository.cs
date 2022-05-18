@@ -24,6 +24,8 @@ namespace BookingFlights.Abstractions.Repository
 
         Ticket Update(Ticket element);
 
+        void TicketForFlight(Ticket ticket);
+
         Task SaveAsync();
     }
 }

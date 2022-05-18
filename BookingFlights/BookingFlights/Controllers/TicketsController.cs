@@ -17,11 +17,11 @@ namespace BookingFlights.Controllers
     {
         private readonly ITicketService _ticketService;
         private readonly IBookingService _bookingService;
-        private readonly BookingFlightsDbContext _context;
+        
 
-        public TicketsController(BookingFlightsDbContext context, ITicketService _ticketService, IBookingService bookingService)
+        public TicketsController(ITicketService _ticketService, IBookingService bookingService)
         {
-            _context = context;
+            
             this._ticketService = _ticketService;
             this._bookingService = bookingService;
         }
@@ -38,9 +38,10 @@ namespace BookingFlights.Controllers
             {
                 Booking booking = new Booking { UserName = userEmail, FlightId = id };
 
-                
+                //_context.Add(booking);
+                //await _context.SaveChangesAsync();
                 _bookingService.CreateFromEntity(booking);
-                await _ticketService.SaveAsync();
+                await _bookingService.SaveAsync();
                 var tickets = _ticketService.GetAllQueryable();
                 return View(await tickets.ToListAsync());
             }
@@ -132,7 +133,8 @@ namespace BookingFlights.Controllers
                 try
                 {
                     _ticketService.UpdateFromEntity(ticket);
-                    _context.Entry(ticket).Property(u => u.FlightId).IsModified = false;
+                    //_context.Entry(ticket).Property(u => u.FlightId).IsModified = false;
+                    _ticketService.TicketForFLight(ticket);
                     await _ticketService.SaveAsync();
                 }
                 catch (DbUpdateConcurrencyException)

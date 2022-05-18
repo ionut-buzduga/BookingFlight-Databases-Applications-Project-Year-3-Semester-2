@@ -16,6 +16,7 @@ namespace BookingFlights.Abstractions.Services
         public void ChooseTicket1(Ticket passenger);
         public void DeleteFromEntity(Ticket passenger);
 
+        void TicketForFLight(Ticket ticket);
         System.Threading.Tasks.Task SaveAsync();
         
     }

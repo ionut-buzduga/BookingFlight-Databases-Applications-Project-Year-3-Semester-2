@@ -69,5 +69,10 @@ namespace BookingFlights.DataAccess
         {
             await this.dbContext.SaveChangesAsync();
         }
+
+        public void TicketForFlight(Ticket ticket)
+        {
+            dbContext.Entry(ticket).Property(u => u.FlightId).IsModified = false;
+        }
     }
 }

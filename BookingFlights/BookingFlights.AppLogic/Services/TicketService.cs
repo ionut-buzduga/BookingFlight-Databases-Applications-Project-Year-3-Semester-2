@@ -47,6 +47,13 @@ namespace BookingFlights.AppLogic.Services
         public async System.Threading.Tasks.Task SaveAsync()
         {
             await _repositoryWrapper.TicketRepository.SaveAsync();
+
+
+        }
+
+        public void TicketForFLight(Ticket ticket)
+        {
+            _repositoryWrapper.TicketRepository.TicketForFlight(ticket);
         }
     }
 }
