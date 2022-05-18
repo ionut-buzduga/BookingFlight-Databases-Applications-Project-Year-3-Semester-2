@@ -17,6 +17,8 @@ namespace BookingFlights.Abstractions.Repository
 
         ITicketRepository TicketRepository { get; } 
 
+        IBookingRepository BookingRepository { get; }
+
         void Save();
     }
 
