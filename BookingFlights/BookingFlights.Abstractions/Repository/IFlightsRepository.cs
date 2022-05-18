@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BookingFlights.Abstractions.Repository
 {
-    public interface IFlightsRepository: IBaseRepository<Flight>
-    {
-
+    public interface IFlightsRepository : IBaseRepository<Flight>
+    { 
+        IQueryable<Flight> SearchFlight(string departureCity, string arrivalCity, DateTime departureDate);
     }
 }

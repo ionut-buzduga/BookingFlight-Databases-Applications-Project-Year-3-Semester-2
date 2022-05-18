@@ -15,11 +15,11 @@ namespace BookingFlights.DataAccess
         {
         }
 
-        //public override IQueryable<Flight> GetAll()
-        //{
-        //    return dbContext.Set<Flight>()
-        //                    .Include(flight => flight.Seats)
-        //                    .ToList();
-        //}
+        public IQueryable<Flight> SearchFlight(string departureCity, string arrivalCity, DateTime departureDate)
+        {
+            return dbContext.Flights.Where(flight => flight.DepartureCity == departureCity)
+                                                 .Where(flight => flight.ArrivalCity == arrivalCity)
+                                                 .Where(flight => flight.departureDate.Date == departureDate.Date);
+        }
     }
 }

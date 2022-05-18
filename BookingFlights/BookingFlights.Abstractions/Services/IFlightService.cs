@@ -9,8 +9,6 @@ namespace BookingFlights.Abstractions.Services
 {
     public interface IFlightService
     {
-        // IQueryable<Flight> GetAllQueryable();
-        // IQueryable<Flight> GetByCondition(Expression<Func<Course, bool>> expression);
         IQueryable<Flight> GetAllQueryable();
         void CreateFromEntity(Flight flight);
         public void UpdateFromEntity(Flight flight);
@@ -18,10 +16,7 @@ namespace BookingFlights.Abstractions.Services
         public void DeleteFromEntity(Flight flight);
 
         System.Threading.Tasks.Task SaveAsync();
-        //  void FlightFromEntity(Flight flight);
-        //  void DeleteFromEntity(Flight flight);
-        //  System.Threading.Tasks.Task SaveAsync();
-        //  IQueryable<Flight> GetFlights();
 
+        IQueryable<Flight> SearchFlight(string departureCity, string arrivalCity, DateTime departureDate);
     }
 }

@@ -17,10 +17,8 @@ namespace BookingFlights
         private readonly IFlightService _flightService;
         private readonly ISeatService _seatService;
         private readonly ITicketService _ticketService;
-        private readonly BookingFlightsDbContext _context;
-        public FlightsController(BookingFlightsDbContext context, IFlightService flightService , ISeatService seatService, ITicketService ticeketService)
+        public FlightsController(IFlightService flightService , ISeatService seatService, ITicketService ticeketService)
         {
-            _context = context;
             _flightService = flightService;
             _seatService = seatService;
             _ticketService = ticeketService;
@@ -29,19 +27,24 @@ namespace BookingFlights
         // GET: Flights
         public async Task<IActionResult> Index(string departureCity, string arrivalCity, DateTime departureDate)
         {
-            var specificFlight = _flightService.GetAllQueryable();
-            if (departureCity is not null)
+            if (departureCity != null && arrivalCity != null)
             {
-                specificFlight = _context.Flights.Where(flight => flight.DepartureCity == departureCity)
-                                                 .Where(flight => flight.ArrivalCity == arrivalCity)
-                                                 .Where(flight => flight.departureDate.Date == departureDate.Date);
-            }
-            if (specificFlight == null)
-            {
-                return NotFound();
-            }
+               var specificFlight = _flightService.SearchFlight(departureCity, arrivalCity, departureDate);
 
-            return View(await specificFlight.ToListAsync());
+               if (specificFlight.Any())
+                {
+                    return View(await specificFlight.ToListAsync());
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+               
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         // GET: Flights/Details/5

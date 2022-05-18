@@ -47,5 +47,9 @@ namespace BookingFlights.AppLogic.Services
             await _repositoryWrapper.FlightsRepository.SaveAsync();
         }
 
+        public IQueryable<Flight> SearchFlight(string departureCity, string arrivalCity, DateTime departureDate)
+        {
+            return _repositoryWrapper.FlightsRepository.SearchFlight(departureCity,arrivalCity,departureDate);
+        }
     }
 }
