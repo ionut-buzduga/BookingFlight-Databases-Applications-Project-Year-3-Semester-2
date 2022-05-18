@@ -135,17 +135,25 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 }
 </style>
 <ul class="tilesWrap">
+	@foreach (var item in Model) {
 	<li>
-		<h2>01</h2>
-		<h3>Business class</h3>
+		<h2></h2>
+		<h3>
+			@Html.DisplayFor(modelItem => item.Type)
+		</h3>
 		<p>
-			Lorem Ipsum is simply dummy text of the printing and typesetting   
-			industry. Lorem Ipsum has been the industry's standard dummy text ever 
-			since the 1500s.
+			Price for this package is:
+			@Html.DisplayFor(modelItem => item.Price)
 		</p>
-		<button><a asp-action="chooseTicket1">Choose</a></button>
+		<form method="index" action="Seats">
+                <input type="hidden" value="@item.FlightId" name="FlightId" />
+				<input type="hidden" value="@item.Id" name="TicketId" />
+                <input type="submit" value="Choose Seat" />
+		</form>
+		@*<button>Choose</button>*@
 	</li>
-	<li>
+}
+	@*<li>
 		<h2>02</h2>
 		<h3>Economy class</h3>
 		<p>
@@ -162,7 +170,7 @@ background: linear-gradient(to right, #0ABFBC, #FC354C);
 		</p>
 		<button>Choose</button>
 	</li>
-</ul>
+</ul>*@
 
 	<p>
     <a asp-action="Create">Create New</a>
