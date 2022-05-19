@@ -21,7 +21,7 @@
 			Price for this package is:
 			@Html.DisplayFor(modelItem => item.Price)
 		</p>
-		<form method="index" action="Seats">
+		<form method="index"  action="Seats">
                 <input type="hidden" value="@item.FlightId" name="FlightId" />
 				<input type="hidden" value="@item.Id" name="TicketId" />
                 <input type="submit" value="Choose Seat" />

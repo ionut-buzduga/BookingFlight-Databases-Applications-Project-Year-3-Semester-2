@@ -41,8 +41,8 @@ namespace BookingFlights.Controllers
 
                 _bookingService.CreateFromEntity(booking);
                 await _bookingService.SaveAsync();
-                var tickets = _ticketService.GetAllQueryable();
-                return View(await tickets.ToListAsync());
+                var tickets = _ticketService.findSpecificFlight(id);
+                return View(tickets);
             }
             else
             {
@@ -77,6 +77,7 @@ namespace BookingFlights.Controllers
         }
 
         // GET: Tickets/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -87,6 +88,7 @@ namespace BookingFlights.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Type,Price,FlightId,Id")] Ticket ticket)
         {
             if (ModelState.IsValid)
@@ -100,6 +102,7 @@ namespace BookingFlights.Controllers
         }
 
         // GET: Tickets/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -120,6 +123,7 @@ namespace BookingFlights.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id, [Bind("Type,Price,FlightId,Id")] Ticket ticket)
         {
             if (id != ticket.Id)
@@ -153,6 +157,7 @@ namespace BookingFlights.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -170,6 +175,7 @@ namespace BookingFlights.Controllers
         }
 
         // POST: Tickets/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)

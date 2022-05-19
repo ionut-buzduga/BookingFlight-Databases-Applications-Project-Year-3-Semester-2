@@ -18,6 +18,6 @@ namespace BookingFlights.Abstractions.Services
 
         void TicketForFLight(Ticket ticket);
         System.Threading.Tasks.Task SaveAsync();
-        
+        IQueryable<Ticket> findSpecificFlight(Guid id);
     }
 }

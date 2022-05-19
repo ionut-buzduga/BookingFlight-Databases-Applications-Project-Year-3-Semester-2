@@ -32,12 +32,11 @@ namespace BookingFlights.Controllers
         // GET: Seats
         public async Task<IActionResult> Index(Guid FlightId,Guid TicketId)
         {
-            var seats = _seatService.GetAllQueryable();
+            var seats = _seatService.GetByCondition(seat => seat.FlightId == FlightId);
 
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
             Booking booking = _bookingService.FindUser(FlightId,userEmail);
-
             booking.TicketId = TicketId;
             _context.SaveChanges();
             return View(await seats.ToListAsync());
@@ -107,9 +106,8 @@ namespace BookingFlights.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Number,isAvailable,Id")] Seat seat,Flight flight)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Number,isAvailable,Id,FlightId")] Seat seat,Flight flight)
         {
-            var seats = _seatService.GetAllQueryable();
             if (id != seat.Id)
             {
                 return NotFound();
@@ -121,7 +119,9 @@ namespace BookingFlights.Controllers
                 {
                     _seatService.UpdateFromEntity(seat);
                     _seatService.SeatForFLight(seat);
+
                     await _seatService.SaveAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -134,10 +134,9 @@ namespace BookingFlights.Controllers
                         throw;
                     }
                 }
-
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
 
-                Booking booking = _bookingService.FindEmail(userEmail);
+                Booking booking = _bookingService.FindUser(seat.FlightId, userEmail);
                 booking.SeatId = seat.Id;
                 await _bookingService.SaveAsync();
                 return RedirectToAction("Index","Home");

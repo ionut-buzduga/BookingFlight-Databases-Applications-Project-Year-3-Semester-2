@@ -55,5 +55,10 @@ namespace BookingFlights.AppLogic.Services
         {
             _repositoryWrapper.TicketRepository.TicketForFlight(ticket);
         }
+
+        public IQueryable<Ticket> findSpecificFlight(Guid id)
+        {
+            return _repositoryWrapper.TicketRepository.FindByCondition(ticket => ticket.FlightId == id);
+        }
     }
 }

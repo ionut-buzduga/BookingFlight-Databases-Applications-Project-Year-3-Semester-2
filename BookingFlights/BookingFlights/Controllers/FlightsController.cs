@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BookingFlights.DataAccess;
 using BookingFlights.DataModel;
 using BookingFlights.Abstractions.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingFlights
 {
@@ -25,6 +26,7 @@ namespace BookingFlights
         }
 
         // GET: Flights
+        [Authorize]
         public async Task<IActionResult> Index(string departureCity, string arrivalCity, DateTime departureDate)
         {
             if (departureCity != null && arrivalCity != null)
@@ -47,8 +49,9 @@ namespace BookingFlights
         }
 
 
-        
+
         // GET: Flights/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -67,6 +70,7 @@ namespace BookingFlights
         }
 
         // GET: Flights/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -77,27 +81,29 @@ namespace BookingFlights
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Name,DepartureCity,ArrivalCity,departureDate,arrivalDate,Id")] Flight flight)
         {
             if (ModelState.IsValid)
             {
 
                
-                flight.Id = Guid.NewGuid();
+                
+                _flightService.CreateFromEntity(flight);
+                await _flightService.SaveAsync();
                 for (int i = 1; i <= 25; i++)
                 {
-                    Seat seat = new Seat { Number = i, isAvailable = false ,FlightId=flight.Id};
+                    Seat seat = new Seat { Number = i, isAvailable = false, FlightId = flight.Id,Flight = flight};
                     flight.Seats.Add(seat);
                     await _seatService.SaveAsync();
                 }
-                _flightService.CreateFromEntity(flight);
-                await _flightService.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(flight);
         }
 
         // GET: Flights/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -119,6 +125,7 @@ namespace BookingFlights
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id, [Bind("Name,DepartureCity,ArrivalCity,departureDate,arrivalDate,Id")] Flight flight)
         {
             if (id != flight.Id)
@@ -151,6 +158,7 @@ namespace BookingFlights
         }
 
         // GET: Flights/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -170,6 +178,7 @@ namespace BookingFlights
         // POST: Flights/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
 
