@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31019.35
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingFlights", "BookingFlights\BookingFlights.csproj", "{D218F617-5B35-4537-BCC5-AD038528D319}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingFlights.Abstractions", "BookingFlights.Abstractions\BookingFlights.Abstractions.csproj", "{06D0F12A-AE4B-44DB-8DA1-8431E1A7487F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingFlights.DataModel", "BookingFlights.DataModel\BookingFlights.DataModel.csproj", "{5EE9CAC7-4CEA-4C7D-B94F-A8A289473A41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingFlights.UnitTests", "BookingFlights.UnitTests\BookingFlights.UnitTests.csproj", "{22036BC2-5061-466A-8063-77EFB7EF3352}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{5EE9CAC7-4CEA-4C7D-B94F-A8A289473A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE9CAC7-4CEA-4C7D-B94F-A8A289473A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE9CAC7-4CEA-4C7D-B94F-A8A289473A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22036BC2-5061-466A-8063-77EFB7EF3352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22036BC2-5061-466A-8063-77EFB7EF3352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22036BC2-5061-466A-8063-77EFB7EF3352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22036BC2-5061-466A-8063-77EFB7EF3352}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
