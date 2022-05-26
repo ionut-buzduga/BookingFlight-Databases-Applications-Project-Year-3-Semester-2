@@ -19,6 +19,15 @@ namespace BookingFlights.UnitTests
         private const string ConnectionString = @"Server=(localdb)\mssqllocaldb;Database=BookingFlightDb;Trusted_Connection=True";
 
         //function for intialization of the service
+        private BookingService init2()
+        {
+            BookingFlightsDbContext dbContext = new BookingFlightsDbContext(new DbContextOptionsBuilder<BookingFlightsDbContext>()
+                .UseSqlServer(ConnectionString)
+                .Options);
+            IRepositoryWrapper repositoryWrapper = new RepositoryWrapper(dbContext);
+            return new BookingService(repositoryWrapper);
+        }
+
         private FlightService init()
         {
             BookingFlightsDbContext dbContext = new BookingFlightsDbContext(new DbContextOptionsBuilder<BookingFlightsDbContext>()
@@ -38,7 +47,7 @@ namespace BookingFlights.UnitTests
             var flightList = _flightService.GetAllQueryable().ToList();
 
             //Assert
-            Assert.AreEqual(6, flightList.Count);
+            Assert.AreEqual(3, flightList.Count);
         }
 
         [TestMethod]
@@ -46,17 +55,43 @@ namespace BookingFlights.UnitTests
         {
             //Arange
             FlightService _flightService = init();
-            Guid FlightId = Guid.Parse("71b931fb-1c09-4bb4-99ae-a04be89bbaf6");
-            string FlightName = "Z3123";
-            string departureCity = "Craiova";
-            string arrivalCity = "Cluj";
-            DateTime departureDate = new DateTime(2022, 05, 18, 23, 48, 00);
+           
+            string departureCity = "Barcelona";
+            string arrivalCity = "Viena";
+            DateTime departureDate = new DateTime(2022, 05, 26, 14, 07, 00);
 
             //Act
             var searchflight = _flightService.SearchFlight(departureCity, arrivalCity, departureDate);
 
-            //Assert
-            Assert.IsNotNull(searchflight);
+            foreach(Flight flight in searchflight)
+            {
+                Assert.AreEqual("ASASD", flight.Name);
+            }
+        }
+
+        [TestMethod]
+        public void deleteBookingFlight()
+        {
+            FlightService flightService = init();
+            BookingService bookingService = init2();
+
+            string departureCity = "Barcelona";
+            string arrivalCity = "Viena";
+            DateTime departureDate = new DateTime(2022, 05, 26, 14, 07, 00);
+
+            //Act
+            var searchflight = flightService.SearchFlight(departureCity, arrivalCity, departureDate);
+
+            foreach(Flight flight in searchflight)
+            {
+                flightService.DeleteFromEntity(flight);
+            }
+
+            Guid flightId = Guid.Parse("2f5f24e1-5687-4dab-3ec8-08da3968162b");
+            Booking SearchBook = bookingService.FindUser(flightId, "user@gmail.com");
+
+            Assert.IsNull(SearchBook);
+
         }
     }
 }

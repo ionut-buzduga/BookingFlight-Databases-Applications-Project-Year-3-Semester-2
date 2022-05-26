@@ -34,29 +34,6 @@ namespace BookingFlights.UnitTests
             //Arange
            BookingService _bookingService = init();
 
-            //create 3 bookings
-            Booking book1 = new Booking()
-            {
-                UserName = "book1",
-                FlightId = Guid.NewGuid(),
-                SeatId = Guid.NewGuid(),
-                TicketId = Guid.NewGuid()
-            };
-            Booking book2 = new Booking()
-            {
-                UserName = "book1",
-                FlightId = Guid.NewGuid(),
-                SeatId = Guid.NewGuid(),
-                TicketId = Guid.NewGuid()
-            };
-            Booking book3 = new Booking()
-            {
-                UserName = "book1",
-                FlightId = Guid.NewGuid(),
-                SeatId = Guid.NewGuid(),
-                TicketId = Guid.NewGuid()
-            };
-
             //Act
             var bookingList = _bookingService.GetAllQueryable().ToList();
 
@@ -82,7 +59,7 @@ namespace BookingFlights.UnitTests
                 SeatId = Guid.Parse("d37fa453-fff0-4d4d-1fde-08da3968163c"),
                 TicketId = Guid.Parse("04ed9f49-991f-4d96-8777-5824dcd3fd26")
             };
-
+            
             //Act
             Booking findBooking = _bookingService.FindUser(FlightId,UserMail);
             Booking nofindBooking = _bookingService.FindUser(FlightId2, UserMail2);
@@ -134,5 +111,30 @@ namespace BookingFlights.UnitTests
             var findBooking = _bookingService.GetByCondition(booking => booking.Id == BookingId);
             Assert.IsNotNull(findBooking);
         }
+
+        [TestMethod]
+        public void UpdateEntity()
+        {
+            BookingService _bookingService = init();
+            Guid BookingId = Guid.Parse("002bf5aa-641f-4cd1-e396-08da39b03124");
+            Booking book = new Booking()
+            {
+                Id = BookingId,
+                UserName = "use@gmail.com",
+                FlightId = Guid.Parse("2f5f24e1-5687-4dab-3ec8-08da3968162b"),
+                SeatId = Guid.Parse("d28c138b-6715-4096-1ff9-08da3968163c"),
+                TicketId = Guid.Parse("e0350e18-62c4-413c-b09e-4eaecc0f46a9")
+            };
+
+            _bookingService.UpdateFromEntity(book);
+
+            var specificBook = _bookingService.GetByCondition(book => book.Id == BookingId);
+
+            foreach(Booking testBooking in specificBook)
+            {
+                Assert.AreEqual("use@gmail.com", book.UserName);
+            }
+        }
+
     }
 }

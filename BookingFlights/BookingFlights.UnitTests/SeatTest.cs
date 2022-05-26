@@ -38,27 +38,52 @@ namespace BookingFlights.UnitTests
             var seatList = _seatService.GetAllQueryable().ToList();
 
             //Assert
-            Assert.AreEqual(100, seatList.Count);
+            Assert.AreEqual(75, seatList.Count);
         }
 
 
         [TestMethod]
-        public void GetByCondition()
+        public void GetAllSeatsForFlight()
         {
             //Arrange
             SeatService _seatService = init();
-            Guid SeatId = Guid.Parse("ca8ef5a9-79a8-4a8a-57bc-08da3984ad00");
-            Seat book = new Seat()
+            Guid SeatId = Guid.Parse("42fdf6f2-0bff-4ee6-3ec7-08da3968162b");
+            
+
+            var findSeat = _seatService.GetByCondition(seat => seat.FlightId == SeatId);
+            
+            foreach (var seat in findSeat)
             {
-                Id = Guid.Parse("ca8ef5a9-79a8-4a8a-57bc-08da3984ad00"),
+                Assert.IsNotNull(seat);
+            }
+
+            Assert.AreEqual(25, findSeat.Count());
+        }
+
+        [TestMethod]
+        public void UpdateSpecificSeat()
+        {
+            SeatService seatService = init();
+
+            Guid seatGuid = Guid.Parse("668e7f08-260a-4d8f-1fd9-08da3968163c");
+            Guid flightGuid = Guid.Parse("42fdf6f2-0bff-4ee6-3ec7-08da3968162b");
+
+            Seat seat = new Seat()
+            {
+                Id = Guid.Parse("668e7f08-260a-4d8f-1fd9-08da3968163c"),
                 Number = 1,
                 isAvailable = true,
-                FlightId = Guid.Parse("bdc9b0c2-247d-4701-ead9-08da3984acee")
-
+                FlightId = Guid.Parse("42fdf6f2-0bff-4ee6-3ec7-08da3968162b")
             };
 
-            var findSeat = _seatService.GetByCondition(seat => seat.Id == SeatId);
-            Assert.IsNotNull(findSeat);
+            seatService.UpdateFromEntity(seat);
+
+            var specificSeat = seatService.GetByCondition(seat => seat.Id == seatGuid && seat.FlightId == flightGuid);
+
+            foreach(Seat updatedSeat in specificSeat)
+            {
+                Assert.IsTrue(updatedSeat.isAvailable);
+            }
         }
     }
 }

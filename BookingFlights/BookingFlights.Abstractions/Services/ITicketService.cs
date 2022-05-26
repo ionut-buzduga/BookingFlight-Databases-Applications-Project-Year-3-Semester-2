@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,5 +20,7 @@ namespace BookingFlights.Abstractions.Services
         void TicketForFLight(Ticket ticket);
         System.Threading.Tasks.Task SaveAsync();
         IQueryable<Ticket> findSpecificFlight(Guid id);
+
+        IQueryable<Ticket> GetByCondition(Expression<Func<Ticket, bool>> expression);
     }
 }

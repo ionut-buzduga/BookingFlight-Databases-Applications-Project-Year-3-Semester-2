@@ -21,5 +21,10 @@ namespace BookingFlights.DataAccess
                                                  .Where(flight => flight.ArrivalCity == arrivalCity)
                                                  .Where(flight => flight.departureDate.Date == departureDate.Date);
         }
+
+        public Flight GetFlightById(Guid id)
+        {
+            return dbContext.Flights.SingleOrDefault(review => review.Equals(id));
+        }
     }
 }

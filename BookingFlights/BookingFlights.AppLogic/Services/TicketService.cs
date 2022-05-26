@@ -4,6 +4,7 @@ using BookingFlights.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,6 +60,11 @@ namespace BookingFlights.AppLogic.Services
         public IQueryable<Ticket> findSpecificFlight(Guid id)
         {
             return _repositoryWrapper.TicketRepository.FindByCondition(ticket => ticket.FlightId == id);
+        }
+
+        public IQueryable<Ticket> GetByCondition(Expression<Func<Ticket, bool>> expression)
+        {
+            return _repositoryWrapper.TicketRepository.FindByCondition(expression);
         }
     }
 }

@@ -37,85 +37,57 @@ namespace BookingFlights.UnitTests
             //Arange
             TicketService _ticketService = init();
 
-            //create 3 bookings
-            Ticket ticket1 = new Ticket()
-            {
-                Type = "Economy",
-                FlightId = Guid.NewGuid(),
-                Price = 80
-            };
-            Ticket ticket2 = new Ticket()
-            {
-                Type = "Business",
-                FlightId = Guid.NewGuid(),
-                Price = 100
-            };
-            Ticket ticket3 = new Ticket()
-            {
-                Type = "All-inclusive",
-                FlightId = Guid.NewGuid(),
-                Price = 150
-            };
-
             //Act
             var ticketList = _ticketService.GetAllQueryable().ToList();
 
             //Assert
-            Assert.AreEqual(3, ticketList.Count + 1);
+            Assert.AreEqual(9, ticketList.Count);
         }
 
-        //[TestMethod]
-        //public void TicketForFlight_Works()
-        //{
-        //    //Arrange
-        //    TicketService _ticketService = init();
-        //    Ticket ticket1 = new Ticket()
-        //    {
-        //        Type = "Economy",
-        //        FlightId = Guid.NewGuid(),
-        //        Price = 80
-        //    };
+        [TestMethod]
+        public void FindSpecificFlight()
+        {
+            //Arrange
+            TicketService _ticketService = init();
+            Guid FlightId = Guid.Parse("42fdf6f2-0bff-4ee6-3ec7-08da3968162b");
 
-        //    //Act
-        //    Ticket specificTicket = _ticketService.TicketForFLight(ticket1);
+            //Act
+            var findTicket = _ticketService.findSpecificFlight(FlightId);
 
-        //    //Assert
-        //    Assert.
-        //}
+            //Assert
+           foreach(var ticket in findTicket)
+            {
+                Assert.IsNotNull(ticket);
+            }
 
-        //[TestMethod]
-        //public void FindSpecificFlight()
-        //{
-        //    //Arrange
-        //    TicketService _ticketService = init();
-        //    Guid FlightId = Guid.Parse("2f5f24e1-5687-4dab-3ec8-08da3968162b");
-        //    Ticket ticket = new Ticket()
-        //    {
-        //        FlightId = Guid.Parse("2f5f24e1-5687-4dab-3ec8-08da3968162b"),
-        //        Type = "economy",
-        //        Price = 80
-        //    };
-        //    //Act
-        //    Ticket findflight = _ticketService.findSpecificFlight(FlightId);
+            Assert.AreEqual(3, findTicket.Count());
+        }
 
-        //    //Assert
-        //    Assert.AreEqual(findflight.FlightId, ticket.FlightId);
-        //}
+        [TestMethod]
+        public void UpdateFromEntity_Works()
+        {
+            //Arrange
+            TicketService ticketService = init();
+            Guid TicketId = Guid.Parse("e2158fee-9da7-4b9b-904b-0b01f3dea174");
+            Guid FlightId = Guid.Parse("2f5f24e1-5687-4dab-3ec8-08da3968162b");
 
-        //[TestMethod]
-        //public void DeleteFromEntity_Works()
-        //{
-        //    //Arrange
-        //    TicketService _ticketService = init();
-        //    Guid TicketId = Guid.Parse("0b109973-1f2c-4e1f-e569-08da399c3869");
-        //    Ticket ticket = new Ticket()
-        //    {
-        //        Id = Guid.Parse("0b109973-1f2c-4e1f-e569-08da399c3869"),
 
-        //    };
+            Ticket ticket = new Ticket()
+            {
+                Id = TicketId,
+                Type = "Business",
+                FlightId = FlightId,
+                Price = 305
+            };
 
-        //    var findticket = _ticketService.DeleteFromEntity();
-        //    Assert.IsNotNull(findticket);
-        //}
+            ticketService.UpdateFromEntity(ticket);
+
+            var specificTicket = ticketService.GetByCondition(ticket => ticket.Id == TicketId);
+
+            foreach (Ticket testTicket in specificTicket)
+            {
+                Assert.AreEqual(305, testTicket.Price);
+            }
+        }
     }
 }
