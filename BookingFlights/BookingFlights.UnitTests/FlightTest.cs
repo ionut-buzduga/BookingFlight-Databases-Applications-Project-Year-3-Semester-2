@@ -93,5 +93,38 @@ namespace BookingFlights.UnitTests
             Assert.IsNull(SearchBook);
 
         }
+
+
+        [TestMethod]
+        public void UpdateSpecificSeat()
+        {
+            FlightService flightService = init();
+            Guid flightId = Guid.Parse("d8af8f99-9e13-4f04-3fa9-08da3987d535");
+            DateTime arrivalDate = new DateTime(2022, 05, 26, 14, 07, 0);
+            DateTime departureDate = new DateTime(2022, 05, 26, 14, 07, 0); ;
+
+            Flight flight = new Flight()
+            {
+                Id = flightId,
+                Name = "WX17T3",
+                ArrivalCity = "Munchen",
+                DepartureCity = "Craiova",
+                arrivalDate = arrivalDate,
+                departureDate = departureDate
+            };
+
+            flightService.UpdateFromEntity(flight);
+
+            var newFlight = flightService.SearchFlight("Craiova", "Munchen", departureDate);
+
+            foreach(Flight testFlight in newFlight)
+            {
+                if (testFlight.Id == flightId)
+                {
+                    Assert.AreEqual(departureDate, testFlight.departureDate);
+                }
+            }
+
+        }
     }
 }

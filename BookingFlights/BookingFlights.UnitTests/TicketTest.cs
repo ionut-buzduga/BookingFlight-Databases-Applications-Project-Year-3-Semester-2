@@ -31,6 +31,15 @@ namespace BookingFlights.UnitTests
             return new TicketService(repositoryWrapper);
         }
 
+        private FlightService init2()
+        {
+            BookingFlightsDbContext dbContext = new BookingFlightsDbContext(new DbContextOptionsBuilder<BookingFlightsDbContext>()
+                .UseSqlServer(ConnectionString)
+                .Options);
+            IRepositoryWrapper repositoryWrapper = new RepositoryWrapper(dbContext);
+            return new FlightService(repositoryWrapper);
+        }
+
         [TestMethod]
         public void GetAllTicketsCreated()
         {
@@ -89,5 +98,34 @@ namespace BookingFlights.UnitTests
                 Assert.AreEqual(305, testTicket.Price);
             }
         }
+
+        [TestMethod]
+        public void DeleteTicketsFlight()
+        {
+
+            TicketService ticketService = init();
+            FlightService flightService = init2();
+
+            string departureCity = "Barcelona";
+            string arrivalCity = "Viena";
+            DateTime departureDate = new DateTime(2022, 05, 26, 14, 07, 00);
+
+            //Act
+            var searchflight = flightService.SearchFlight(departureCity, arrivalCity, departureDate);
+
+            foreach (Flight flight in searchflight)
+            {
+                flightService.DeleteFromEntity(flight);
+            }
+
+            Guid flightId = Guid.Parse("2f5f24e1-5687-4dab-3ec8-08da3968162b");
+            var ticketsFlight = ticketService.GetByCondition(ticket => ticket.FlightId == flightId);
+
+            foreach(Ticket tickets in ticketsFlight)
+            {
+                Assert.IsNull(tickets);
+            }
+        }
+
     }
 }
